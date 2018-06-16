@@ -1,0 +1,138 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>菜单管理</title>
+	<meta name="decorator" content="default"/>
+	<link href="${ctxStatic}/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="${ctxStatic}/css/font-awesome.css" rel="stylesheet" media="screen">
+	<link href="${ctxStatic}/css/thin-jeesite.css" type="text/css" rel="stylesheet" media="screen"/>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#name").focus();
+			$("#inputForm").validate({
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<form:form id="inputForm" modelAttribute="menu" action="${ctx}/sys/menu/save" method="post" class="form-horizontal">
+		<form:hidden path="id"/>
+		<sys:message content="${message}"/>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">上级菜单:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+                <sys:treeselect id="menu" name="parent.id" value="${menu.parent.id}" labelName="parent.name" labelValue="${menu.parent.name}"
+					title="菜单" url="/sys/menu/treeData" extId="${menu.id}" cssClass="required"/>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">名称:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:input path="name" htmlEscape="false" maxlength="50" class="required input-xlarge"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">链接:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:input path="href" htmlEscape="false" maxlength="2000" class="input-xxlarge"/>
+				<span class="help-inline">点击菜单跳转的页面</span>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">目标:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:input path="target" htmlEscape="false" maxlength="10" class="input-small"/>
+				<span class="help-inline">链接地址打开的目标窗口，默认：mainFrame</span>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">图标:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<sys:iconselect id="icon" name="icon" value="${menu.icon}"/>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">排序:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:input path="sort" htmlEscape="false" maxlength="50" class="required digits input-small"/>
+				<span class="help-inline">排列顺序，升序。</span>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">可见:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:radiobuttons path="isShow" items="${fns:getDictList('show_hide')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
+				<span class="help-inline">该菜单或操作是否显示到系统菜单中</span>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">权限标识:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:input path="permission" htmlEscape="false" maxlength="100" class="input-xxlarge"/>
+				<span class="help-inline">控制器中定义的权限标识，如：@RequiresPermissions("权限标识")</span>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">备注:</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xxlarge"/>
+			</div>
+			</div>
+		</div>
+		<div class="form-actions">
+			<shiro:hasPermission name="sys:menu:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<input id="btnCancel" class="btn btn-info" type="button" value="返 回" onclick="history.go(-1)"/>
+		</div>
+	</form:form>
+</body>
+</html>

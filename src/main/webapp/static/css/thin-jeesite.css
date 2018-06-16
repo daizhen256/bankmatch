@@ -1,0 +1,26 @@
+.pagination {margin:8px 0;} .pagination .controls a{border:0;}
+.pagination .controls input{border:0;color:#999;width:30px;padding:0;margin:-3px 0 0 0;text-align:center;}
+body{
+	background-color: transparent;
+	background-image:none;
+}
+#openClose,#openClose.close {background:#efefef url("../images/openclose.png") no-repeat -29px center;}
+#openClose.close {background-position:1px center;opacity:0.5;filter:alpha(opacity=50)}
+.form-control {
+	width:375px;
+	height: 26px;
+	border-width: 1px;
+	border-style: solid;
+	border-left-color: #c5c5c5;
+	border-top-color: #c5c5c5;
+	border-right-color: #e0e0e0;
+	border-bottom-color: #e0e0e0;
+	*line-height: 26px;
+	outline: none;
+	background: url(../img/skin_/inputbg.png);
+	padding: 0 10px;
+}
+.form-actions {
+	margin-top: 20px;
+	padding: 19px 20px 20px;
+}
