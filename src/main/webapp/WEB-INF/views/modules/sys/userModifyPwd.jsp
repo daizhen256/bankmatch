@@ -41,7 +41,7 @@
 		<div class="col-md-2">
 			<label class="control-label">旧密码:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<input id="oldPassword" name="oldPassword" type="password" value="" maxlength="50" minlength="3" class="required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -52,7 +52,7 @@
 		<div class="col-md-2">
 			<label class="control-label">新密码:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<input id="newPassword" name="newPassword" type="password" value="" maxlength="50" minlength="3" class="required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -63,7 +63,7 @@
 		<div class="col-md-2">
 			<label class="control-label">确认新密码:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<input id="confirmNewPassword" name="confirmNewPassword" type="password" value="" maxlength="50" minlength="3" class="required" equalTo="#newPassword"/>
 				<span class="help-inline"><font color="red">*</font> </span>

@@ -78,6 +78,14 @@ jQuery(".exit").click(function(){
 	jQuery(".exitDialog").Dialog('open');
 });
 
+jQuery(".modalLink li").click(function($this){
+	var name = $this.text();
+	var href = $this.attr('href');
+	alert(name);
+	alert(href);
+	
+});
+
 jQuery(".exitDialog input[type=button]").click(function(e) {
 	jQuery(".exitDialog").Dialog('close');
 	
@@ -85,41 +93,6 @@ jQuery(".exitDialog input[type=button]").click(function(e) {
 		window.location.href = "${ctx}/logout"	;
 	}
 });
-jQuery('#exampleModal').on('shown.bs.modal', function (event) {
-	  var button = jQuery(event.relatedTarget); // Button that triggered the modal
-	  var messageContent = button.data('whatever'); // Extract info from data-* attributes
-	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-	  var modal = jQuery(this);
-	  jQuery.ajax({
-	        url:'${messageContentUri}'+messageContent.id,
-	        type:'get',
-	        dataType:'json',
-	        timeout:5000,
-	        success:function(data, textStatus){
-	            if(textStatus == "success"){
-	            	localStorage.removeItem("messageid_"+messageContent.id);
-	            	var sendDate = new Date();
-	            	sendDate.setTime(messageContent.sendDate);
-	            	modal.find('.modal-title').text('来自 ' + messageContent.sender.name + '的短消息');
-					modal.find('.modal-body #sendDate').val(sendDate.toLocaleString());
-					modal.find('.modal-body #senderid').val(messageContent.sender.id);
-					modal.find('.modal-body #receiveid').val(messageContent.receiver.id);
-					modal.find('.modal-body #content').val(messageContent.content);
-	            }
-	        },
-	        error:function(XMLHttpRequest, textStatus, errorThrown){
-	            if(textStatus == "timeout"){
-	                //有效时间内没有响应，请求超时，重新发请求
-	            	alert('超时了');
-	            }else{
-	                // 其他的错误，如网络错误等
-	            	alert('其他的错误');
-	            }
-	        }
-	    });
-	  
-	});
 });
 (function(){
 	var totalWidth = 0, current = 1;
@@ -269,36 +242,6 @@ function sendmessage() {
         }
 	});
 }
-function calctime(date1) {
-    var date2 = new Date();    //结束时间  
-    var date3 = date2.getTime() - new Date(date1).getTime();   //时间差的毫秒数        
-  
-    //------------------------------  
-  
-    //计算出相差天数  
-    var days=Math.floor(date3/(24*3600*1000))  
-  
-    //计算出小时数  
-  
-    var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数  
-    var hours=Math.floor(leave1/(3600*1000))  
-    //计算相差分钟数  
-    var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数  
-    var minutes=Math.floor(leave2/(60*1000))  
-    //计算相差秒数  
-    var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数  
-    var seconds=Math.round(leave3/1000)
-    if(days==0&&hours!=0&&minutes!=0&&seconds!=0) {
-    	return hours+"小时"+minutes+"分"+seconds+"秒";
-    }else if(hours==0&&minutes!=0&&seconds!=0) {
-    	return minutes+"分"+seconds+"秒";
-    }else if(minutes==0&&seconds!=0) {
-    	return seconds+"秒";
-    }else if(seconds==0) {
-    	return "刚刚";
-    }
-    return days+"天"+hours+"小时"+minutes+"分"+seconds+"秒"; 
-}
 $(window).load(function() {
 	// 初始化点击第一个一级菜单
 	jQuery("#menu a.menu").eq(0).click();
@@ -334,61 +277,7 @@ $(window).load(function() {
             </div>  
         </div>  
     </div>  
-</div>
-<div class="modal fade" id="passwordmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin: 21.8%;background-color: white;">
-	<div class="modal-dialog" role="document">
-    	<div class="modal-content">
-    	</div>
-    </div>
-</div>
-<div class="modal fade" id="inputmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin: 3%;background-color: white;">
-	<div class="modal-dialog" role="document">
-    	<div class="modal-content">
-    	</div>
-    </div>
-</div>
-<div class="modal fade" id="listmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin: 3%;background-color: white;">
-	<div class="modal-dialog" role="document">
-    	<div class="modal-content">
-    	</div>
-    </div>
-</div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">短消息</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="form_data" action="${ctx}/sys/contact/sysContact/savequick" method="post">
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="message-text" class="form-control-label">发送时间:</label>
-            <input id="sendDate" style="width:95%" type="text" readonly="readonly" class="form-control"/>
-          </div>
-          <div class="form-group">
-          	<input type="hidden" class="form-control" id="senderid" name="receiver">
-          	<input type="hidden" class="form-control" id="receiveid" name="sender">
-            <label for="recipient-name" class="form-control-label">消息内容:</label>
-            <textarea class="form-control" style="width:95%" id="content" readonly="readonly"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="form-control-label">回复:</label>
-            <textarea class="form-control" style="width:95%" name="content" id="reply"></textarea>
-          </div>
-        </form>
-      </div>
-      </form>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary" onclick="sendmessage()">发送回复</button>
-      </div>
-    </div>
-  </div>
-</div>
+</div> 
 <div id="container">
 	<div id="hd">
     	<div class="hd-top">
@@ -398,17 +287,9 @@ $(window).load(function() {
                 <span class="user-name">${fns:getUser().name}</span>
             </div>
             <div class="setting ue-clear">
-            	<div class="setting-skin">
-            		<a href="#" class="dropdown-toggle" data-toggle="dropdown">您有<span class="unreadmessage"></span>条未读消息 <b class="caret"></b></a>
-                	<ul class="dropdown-menu subnav modalLink" style="font-size:10px;width:275px">
-          				<li class="notificationFooter" style="text-align:center"> <a href="${ctx}/sys/contact/sysContact" data-toggle="modal" data-target="#listmodal">查看所有消息</a> </li>
-                    </ul>
-                </div>
                 <ul class="setting-main ue-clear subnav modalLink">
-                	<li id="userinfo" class="subnav-li"><a href="${ctx}/sys/user/info" data-toggle="modal" data-target="#inputmodal">个人信息</a></li>
-                    <li class="subnav-li"><a href="${ctx}/sys/user/modifyPwd" data-toggle="modal" data-target="#passwordmodal">修改密码</a></li>
-                    <li><a href="javascript:;" data-toggle="modal" data-target="#mymodal">帮助</a></li>
-                    <li><a href="javascript:;" class="close-btn exit"></a></li>
+                    <li class="subnav-li" data-id="92" href="${ctx}/sys/user/modifyPwd"><a href="${ctx}/sys/user/modifyPwd" target="mainIframe">修改密码</a></li>
+                    <li><a href="javascript:;" class="exit">退出系统</a></li>
                 </ul>
             </div>
         </div>
@@ -425,7 +306,7 @@ $(window).load(function() {
 							</a></li>
 						</c:if>
 						<c:if test="${not empty menu.href}">
-							<li><a href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" data-toggle="modal" data-target="#inputmodal">
+							<li><a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainIframe">
 								${menu.name}
 							</a></li>
 						</c:if>
@@ -475,25 +356,6 @@ $(window).load(function() {
         </div>
         
     </div>
-</div>
-
-<div class="opt-panel user-opt" style="top:52px;left:330px;">
-	<ul>
-    	<li><a class="text">用户资料</a></li>
-        <li><a class="text">短消息<span class="num">(2)</span></a></li>
-        <li><a class="text">资料信息</a></li>
-        <li><a class="text">注销</a></li>
-        <li><a class="text">自定义</a></li>
-    </ul>
-    <div class="opt-panel-tl"></div>
-    <div class="opt-panel-tc"></div>
-    <div class="opt-panel-tr"></div>
-    <div class="opt-panel-ml"></div>
-    <div class="opt-panel-mr"></div>
-    <div class="opt-panel-bl"></div>
-    <div class="opt-panel-bc"></div>
-    <div class="opt-panel-br"></div>
-    <div class="opt-panel-arrow"></div>
 </div>
 </body>
 </html>

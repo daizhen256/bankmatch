@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.bkm.dao.BkmMatchInfoDao">
+    
+	<sql id="bkmMatchInfoColumns">
+		a.id AS "id",
+		a.match_id AS "matchId",
+		a.match_user AS "matchUser.id",
+		a.match_right_rate AS "matchRightRate",
+		a.match_hse AS "matchHse",
+		a.match_answer AS "matchAnswer",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "matchUser.name"
+	</sql>
+	
+	<sql id="bkmMatchInfoJoins">
+		LEFT JOIN bkm_match b ON b.id = a.match_id
+		LEFT JOIN sys_user u2 ON u2.id = a.match_user
+	</sql>
+    
+	<select id="get" resultType="BkmMatchInfo">
+		SELECT 
+			<include refid="bkmMatchInfoColumns"/>
+		FROM bkm_match_info a
+		<include refid="bkmMatchInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BkmMatchInfo">
+		SELECT 
+			<include refid="bkmMatchInfoColumns"/>
+		FROM bkm_match_info a
+		<include refid="bkmMatchInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="matchId != null and matchId != ''">
+				AND a.match_id = #{matchId}
+			</if>
+			<if test="matchUser != null and matchUser != ''">
+				AND a.match_user = #{matchUser}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BkmMatchInfo">
+		SELECT 
+			<include refid="bkmMatchInfoColumns"/>
+		FROM bkm_match_info a
+		<include refid="bkmMatchInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bkm_match_info(
+			id,
+			match_id,
+			match_user,
+			match_right_rate,
+			match_hse,
+			match_answer,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{matchId},
+			#{matchUser},
+			#{matchRightRate},
+			#{matchHse},
+			#{matchAnswer},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bkm_match_info SET 	
+			match_user = #{matchUser},
+			match_right_rate = #{matchRightRate},
+			match_hse = #{matchHse},
+			match_answer = #{matchAnswer}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE bkm_match_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE match_id = #{matchId}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

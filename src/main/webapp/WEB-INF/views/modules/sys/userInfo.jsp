@@ -88,7 +88,7 @@
 		<div class="col-md-2">
 			<label class="control-label">头像:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<form:hidden id="nameImage" path="photo" htmlEscape="false" maxlength="255" class="input-xlarge"/>
 				<div class="ibox-content">
@@ -107,7 +107,7 @@
 		<div class="col-md-2">
 			<label class="control-label">归属公司:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<label class="lbl">${user.company.name}</label>
 			</div>
@@ -117,7 +117,7 @@
 			<div class="col-md-2">
 				<label class="control-label">归属部门:</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-10">
 				<div class="form-group">
 					<label class="lbl">${user.office.name}</label>
 				</div>
@@ -127,7 +127,7 @@
 		<div class="col-md-2">
 			<label class="control-label">姓名:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<form:input path="name" htmlEscape="false" maxlength="50" class="required" readonly="true"/>
 			</div>
@@ -137,7 +137,7 @@
 		<div class="col-md-2">
 			<label class="control-label">邮箱:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<form:input path="email" htmlEscape="false" maxlength="50" class="email"/>
 			</div>
@@ -147,7 +147,7 @@
 		<div class="col-md-2">
 			<label class="control-label">电话:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<form:input path="phone" htmlEscape="false" maxlength="50"/>
 			</div>
@@ -157,7 +157,7 @@
 		<div class="col-md-2">
 			<label class="control-label">手机:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<form:input path="mobile" htmlEscape="false" maxlength="50"/>
 			</div>
@@ -167,7 +167,7 @@
 		<div class="col-md-2">
 			<label class="control-label">备注:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>
 			</div>
@@ -177,7 +177,7 @@
 		<div class="col-md-2">
 			<label class="control-label">用户类型:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<label class="lbl">${fns:getDictLabel(user.userType, 'sys_user_type', '无')}</label>
 			</div>
@@ -187,7 +187,7 @@
 		<div class="col-md-2">
 			<label class="control-label">用户角色:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<label class="lbl">${user.roleNames}</label>
 			</div>
@@ -197,7 +197,7 @@
 		<div class="col-md-2">
 			<label class="control-label">上次登录:</label>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="form-group">
 				<label class="lbl">IP: ${user.oldLoginIp}&nbsp;&nbsp;&nbsp;&nbsp;时间：<fmt:formatDate value="${user.oldLoginDate}" type="both" dateStyle="full"/></label>
 			</div>
