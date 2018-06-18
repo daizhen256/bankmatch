@@ -23,6 +23,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 getMsgNum();
+getMatchOrder();
 jQuery("#bd").height($(window).height()-$("#hd").outerHeight()-26);
 
 jQuery(window).resize(function(e) {
@@ -158,6 +159,31 @@ jQuery(".exitDialog input[type=button]").click(function(e) {
 		$('.more-info').removeClass('active'); 
 	}); */
 })();
+function getMatchOrder(){
+	jQuery.ajax({
+        url:'${ctx}/bkm/bkmMatch/getMatchOrder?userid=${fns:getUser().id}',
+        type:'get',
+        dataType:'json',
+        timeout:5000,
+        success:function(data, textStatus){
+        	if(textStatus == "success"){
+        		var matchid = data.result;
+        		if(matchid!='') {
+        			jQuery("#mainIframe").attr("src","${ctx}/bkm/bkmMatch/matchinit?id="+matchid);
+        		}
+        	}
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+        	if(textStatus == "timeout"){
+                //有效时间内没有响应，请求超时，重新发请求
+        		alert("网络超时，请稍后重试！");
+            }else{
+                // 其他的错误，如网络错误等
+            	alert("系统错误，请稍后重试！");
+            }
+        }
+	});	
+}
 function getMsgNum(){
 	jQuery.ajax({
         url:'${messageUri}${fns:getUser().id}',
@@ -166,7 +192,7 @@ function getMsgNum(){
         timeout:5000,
         success:function(data, textStatus){
             if(data && data.result){
-                                    //请求成功，刷新数据
+                //请求成功，刷新数据
                 jQuery(".unreadmessage").html(data.result.num);
                 jQuery(".messageContent").remove();
                                     //这个是用来和后台数据作对比判断是否发生了改变

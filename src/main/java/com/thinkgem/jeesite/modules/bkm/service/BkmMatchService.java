@@ -21,6 +21,7 @@ import com.thinkgem.jeesite.modules.bkm.entity.BkmMatch;
 import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchDao;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchInfoDao;
 
 /**
@@ -134,6 +135,38 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 	public void delete(BkmMatch bkmMatch) {
 		super.delete(bkmMatch);
 		//bkmMatchInfoDao.delete(new BkmMatchInfo(bkmMatch));
+	}
+	
+	public String findInfoByUser(String userid){
+		String infoid = bkmMatchInfoDao.findInfoByUser(userid);
+		return infoid;
+	}
+	
+	@Transactional(readOnly = false)
+	public void prepareok(BkmMatch bkmMatch) {
+		User currentUser = UserUtils.getUser();
+		for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
+			if(currentUser.getId().equals(bkmMatchInfo.getMatchUser().getId())) {
+				bkmMatchInfo.setPreStat("1");
+				bkmMatchInfo.preUpdate();
+				bkmMatchInfoDao.updateState(bkmMatchInfo);
+				break;
+			}
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void matchok(BkmMatch bkmMatch) {
+		User currentUser = UserUtils.getUser();
+		for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
+			if(currentUser.getId().equals(bkmMatchInfo.getMatchUser().getId())) {
+				bkmMatchInfo.setPreStat("2");
+				bkmMatchInfo.preUpdate();
+				bkmMatchInfoDao.updateState(bkmMatchInfo);
+				bkmMatchInfoDao.updateHse(bkmMatchInfo);
+				break;
+			}
+		}
 	}
 	
 }

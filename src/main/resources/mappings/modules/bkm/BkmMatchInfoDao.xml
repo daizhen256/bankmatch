@@ -140,4 +140,19 @@
 		</choose>
 	</update>
 	
+	<select id="findInfoByUser" resultType="java.lang.String">
+		SELECT
+			bm.id
+		FROM
+			bkm_match_info bmi
+		LEFT JOIN bkm_match bm ON bm.id = bmi.match_id
+		WHERE
+			bm.match_stat IN ('0','1')
+		AND bmi.pre_stat != '2'
+		AND bmi.match_user = #{userid}
+		AND bm.del_flag = 0
+		AND bmi.del_flag = 0
+		ORDER BY bm.create_date ASC
+	</select>
+	
 </mapper>

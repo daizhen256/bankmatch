@@ -34,6 +34,7 @@ import com.thinkgem.jeesite.modules.sys.entity.JsonPackage;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.service.OfficeService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 考试管理Controller
@@ -164,6 +165,52 @@ public class BkmMatchController extends BaseController {
 		result.put("data", matcherList);
 		json.setResult(result);
 		return json;
+	}
+	
+	@ResponseBody
+    @RequestMapping(value = "getMatchOrder", method=RequestMethod.GET)
+	public JsonPackage getMatchOrder(String userid) {
+		JsonPackage json = new JsonPackage();
+		String matchinfoid = bkmMatchService.findInfoByUser(userid);
+		json.setResult(matchinfoid);
+		return json;
+	}
+	
+	@RequestMapping(value = "matchinit")
+	public String matchinit(BkmMatch bkmMatch, Model model) {
+		User currentUser = UserUtils.getUser();
+		List bkmMatchInfoList = new ArrayList<BkmMatchInfo>();
+		for(int i=0; i<bkmMatch.getBkmMatchInfoList().size();i++) {
+			if(currentUser.getId().equals(bkmMatch.getBkmMatchInfoList().get(i).getMatchUser().getId())) {
+				bkmMatchInfoList.add(bkmMatch.getBkmMatchInfoList().get(i));
+				break;
+			}
+		}
+		bkmMatch.setBkmMatchInfoList(bkmMatchInfoList);
+		model.addAttribute("bkmMatch", bkmMatch);
+		return "modules/bkm/bkmMatchWrite";
+	}
+	
+	@RequestMapping(value = "prepareok")
+	public String prepareok(BkmMatch bkmMatch, Model model) {
+		bkmMatchService.prepareok(bkmMatch);
+		User currentUser = UserUtils.getUser();
+		List bkmMatchInfoList = new ArrayList<BkmMatchInfo>();
+		for(int i=0; i<bkmMatch.getBkmMatchInfoList().size();i++) {
+			if(currentUser.getId().equals(bkmMatch.getBkmMatchInfoList().get(i).getMatchUser().getId())) {
+				bkmMatchInfoList.add(bkmMatch.getBkmMatchInfoList().get(i));
+				break;
+			}
+		}
+		bkmMatch.setBkmMatchInfoList(bkmMatchInfoList);
+		model.addAttribute("bkmMatch", bkmMatch);
+		return "modules/bkm/bkmMatchWrite";
+	}
+	
+	@RequestMapping(value = "matchok")
+	public String matchok(BkmMatch bkmMatch, Model model) {
+		bkmMatchService.matchok(bkmMatch);
+		return "redirect:" + adminPath;
 	}
 
 }

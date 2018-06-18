@@ -18,4 +18,6 @@ public interface BkmMatchInfoDao extends CrudDao<BkmMatchInfo> {
 	public int updateHse(BkmMatchInfo entity);
 	
 	public int updateState(BkmMatchInfo entity);
+	
+	public String findInfoByUser(String userid);
 }
