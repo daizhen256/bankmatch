@@ -90,7 +90,7 @@
 		) VALUES (
 			#{id},
 			#{matchId},
-			#{matchUser},
+			#{matchUser.id},
 			#{matchRightRate},
 			#{matchHse},
 			#{matchAnswer},
@@ -105,7 +105,7 @@
 	
 	<update id="update">
 		UPDATE bkm_match_info SET 	
-			match_user = #{matchUser},
+			match_user = #{matchUser.id},
 			match_right_rate = #{matchRightRate},
 			match_hse = #{matchHse},
 			match_answer = #{matchAnswer}

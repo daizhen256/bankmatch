@@ -22,8 +22,9 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 	private static final long serialVersionUID = 1L;
 	private Date matchDate;		// 考试日期
 	private String matchName;		// 考试名称
-	private String matchPeopleCount;		// 总人数
-	private String matchAveragePoint;		// 平均分
+	private int matchPeopleCount;		// 总人数
+	private double matchAveragePoint;		// 平均分
+	private String matchStat;			// 考试状态
 	private List<BkmMatchInfo> bkmMatchInfoList = Lists.newArrayList();		// 子表列表
 	
 	public BkmMatch() {
@@ -53,20 +54,19 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 		this.matchName = matchName;
 	}
 	
-	@Length(min=1, max=64, message="总人数长度必须介于 1 和 64 之间")
-	public String getMatchPeopleCount() {
+	public int getMatchPeopleCount() {
 		return matchPeopleCount;
 	}
 
-	public void setMatchPeopleCount(String matchPeopleCount) {
+	public void setMatchPeopleCount(int matchPeopleCount) {
 		this.matchPeopleCount = matchPeopleCount;
 	}
 	
-	public String getMatchAveragePoint() {
+	public double getMatchAveragePoint() {
 		return matchAveragePoint;
 	}
 
-	public void setMatchAveragePoint(String matchAveragePoint) {
+	public void setMatchAveragePoint(double matchAveragePoint) {
 		this.matchAveragePoint = matchAveragePoint;
 	}
 	
@@ -77,4 +77,13 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 	public void setBkmMatchInfoList(List<BkmMatchInfo> bkmMatchInfoList) {
 		this.bkmMatchInfoList = bkmMatchInfoList;
 	}
+
+	public String getMatchStat() {
+		return matchStat;
+	}
+
+	public void setMatchStat(String matchStat) {
+		this.matchStat = matchStat;
+	}
+	
 }

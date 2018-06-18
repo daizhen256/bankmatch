@@ -1,13 +1,16 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>考试信息管理</title>
-	<meta name="decorator" content="default"/>
-	<link href="${ctxStatic}/css/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="${ctxStatic}/css/font-awesome.css" rel="stylesheet" media="screen">
-	<link href="${ctxStatic}/css/thin-jeesite.css" type="text/css" rel="stylesheet" media="screen"/>
-	<script type="text/javascript">
+<title>考试信息管理</title>
+<meta name="decorator" content="default" />
+<link href="${ctxStatic}/css/bootstrap.css" rel="stylesheet"
+	media="screen">
+<link href="${ctxStatic}/css/font-awesome.css" rel="stylesheet"
+	media="screen">
+<link href="${ctxStatic}/css/thin-jeesite.css" type="text/css"
+	rel="stylesheet" media="screen" />
+<script type="text/javascript">
 		$(document).ready(function() {
 			//$("#name").focus();
 			$("#inputForm").validate({
@@ -44,130 +47,119 @@
 		}
 		function delRow(obj, prefix){
 			var id = $(prefix+"_id");
-			var delFlag = $(prefix+"_delFlag");
-			if (id.val() == ""){
-				$(obj).parent().parent().remove();
-			}else if(delFlag.val() == "0"){
-				delFlag.val("1");
-				$(obj).html("&divide;").attr("title", "撤销删除");
-				$(obj).parent().parent().addClass("error");
-			}else if(delFlag.val() == "1"){
-				delFlag.val("0");
-				$(obj).html("&times;").attr("title", "删除");
-				$(obj).parent().parent().removeClass("error");
+			$(obj).parent().parent().remove();
+			if(jQuery("#bkmMatchInfoPreList").children().size()==0) {
+				jQuery("#preButton").hide();
 			}
+		}
+		function addPreRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			/* $(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			}); */
 		}
 	</script>
 </head>
 <body>
-	<form:form id="inputForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+	<form:form id="inputForm" modelAttribute="bkmMatch"
+		action="${ctx}/bkm/bkmMatch/save" method="post"
+		class="form-horizontal">
+		<form:hidden path="id" />
+		<form:hidden path="matchDate" />
+		<form:hidden path="matchPeopleCount" />
+		<form:hidden path="matchAveragePoint" />
+		<form:hidden path="matchStat" />
+		<sys:message content="${message}" />
 		<div class="control-group">
-		<div class="col-md-2">
-			<label class="control-label">考试日期：</label>
-		</div>
-		<div class="col-md-10">
-			<div class="form-group">
-				<input name="matchDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
-					value="<fmt:formatDate value="${bkmMatch.matchDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-				<span class="help-inline"><font color="red">*</font> </span>
+			<div class="col-md-2">
+				<label class="control-label">考试名称：</label>
 			</div>
-			</div>
-		</div>
-		<div class="control-group">
-		<div class="col-md-2">
-			<label class="control-label">考试名称：</label>
-		</div>
-		<div class="col-md-10">
-			<div class="form-group">
-				<form:input path="matchName" htmlEscape="false" maxlength="256" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
-			</div>
+			<div class="col-md-10">
+				<div class="form-group">
+					<form:input path="matchName" htmlEscape="false" maxlength="256"
+						class="input-xlarge required" />
+					<span class="help-inline"><font color="red">*</font> </span>
+					<input id="assignButton" class="btn btn-primary" type="button"
+						value="选择考试人员" />
+					<input id="preButton" class="btn btn-primary" type="button"
+						value="确定考试" />
+					<input id="startButton" class="btn btn-primary" type="button"
+						value="开始考试" />
+					<input id="stopButton" class="btn btn-primary" type="button"
+						value="结束考试" />	
+				</div>
 			</div>
 		</div>
-		<div class="control-group">
-		<div class="col-md-2">
-			<label class="control-label">总人数：</label>
-		</div>
-		<div class="col-md-10">
-			<div class="form-group">
-				<form:input path="matchPeopleCount" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
+		<div class="control-group" id="preInfo">
+			<div class="col-md-2">
+				<label class="control-label">考试准备情况：</label>
 			</div>
+			<div class="col-md-10">
+				<div class="controls">
+					<table id="contentTable"
+						class="table table-striped table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th class="hide"></th>
+								<th>考试者</th>
+								<th>准备情况</th>
+								<th width="10">&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody id="bkmMatchInfoPreList">
+						</tbody>
+					</table>
+					<script type="text/template" id="bkmMatchInfoPreTpl">//<!--
+						<tr id="bkmMatchInfoPreList{{idx}}">
+							<td class="hide">
+								<input id="bkmMatchInfoPreList{{idx}}_id" name="bkmMatchInfoList[{{idx}}].id" type="hidden" value="0"/>
+								<input id="bkmMatchInfoPreList{{idx}}_delFlag" name="bkmMatchInfoList[{{idx}}].delFlag" type="hidden" value="0"/>
+							</td>
+							<td>
+								<input id="bkmMatchInfoPreList{{idx}}_matchUser" name="bkmMatchInfoList[{{idx}}].matchUser.name" type="text" value="{{row.name}}" maxlength="64" class="input-small required"/>
+								<input id="bkmMatchInfoPreList{{idx}}_matchUserId" name="bkmMatchInfoList[{{idx}}].matchUser.id" type="hidden" value="{{row.id}}"/>
+							</td>
+							<td>
+								<input id="bkmMatchInfoPreList{{idx}}_preStat" name="bkmMatchInfoList[{{idx}}].preStat" type="text" value="{{row.preStat}}" class="input-small "/>
+							</td>
+							<td class="text-center" width="10">
+								{{#delBtn}}<span class="close" onclick="delRow(this, '#bkmMatchInfoPreList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+							</td>
+						</tr>//-->
+					</script>
+					<script type="text/javascript">
+						var bkmMatchInfoPreRowIdx = 0, bkmMatchInfoPreTpl = $("#bkmMatchInfoPreTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+					</script>
+				</div>
 			</div>
 		</div>
-		<div class="control-group">
-		<div class="col-md-2">
-			<label class="control-label">平均分：</label>
-		</div>
-		<div class="col-md-10">
-			<div class="form-group">
-				<form:input path="matchAveragePoint" htmlEscape="false" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
-			</div>
-			</div>
-		</div>
-			<div class="control-group">
+		<div class="control-group" id="matchInfo">
 			<div class="col-md-2">
 				<label class="control-label">考试明细表：</label>
-				<input id="assignButton" class="btn btn-primary" type="button" value="分配角色"/>
-				<script type="text/javascript">
-					$("#assignButton").click(function(){
-						top.jQuery.jBox.open("iframe:${ctx}/bkm/bkmMatch/usertomatch?id=${role.id}", "分配角色",810,$(top.document).height()-240,{
-							buttons:{"确定分配":"ok", "清除已选":"clear", "关闭":true}, bottomText:"通过选择部门，然后为列出的人员分配角色。",submit:function(v, h, f){
-								var pre_ids = h.find("iframe")[0].contentWindow.pre_ids;
-								var ids = h.find("iframe")[0].contentWindow.ids;
-								//nodes = selectedTree.getSelectedNodes();
-								if (v=="ok"){
-									// 删除''的元素
-									if(ids[0]==''){
-										ids.shift();
-										pre_ids.shift();
-									}
-									if(pre_ids.sort().toString() == ids.sort().toString()){
-										top.jQuery.jBox.tip("未给角色【${role.name}】分配新成员！", 'info');
-										return false;
-									};
-							    	// 执行保存
-							    	loading('正在提交，请稍等...');
-							    	var idsArr = "";
-							    	for (var i = 0; i<ids.length; i++) {
-							    		idsArr = (idsArr + ids[i]) + (((i + 1)== ids.length) ? '':',');
-							    	}
-							    	$('#idsArr').val(idsArr);
-							    	$('#assignRoleForm').submit();
-							    	return true;
-								} else if (v=="clear"){
-									h.find("iframe")[0].contentWindow.clearAssign();
-									return false;
-				                }
-							}, loaded:function(h){
-								jQuery(".jbox-content", top.document).css("overflow-y","hidden");
-							}
-						});
-					});
-				</script>
 			</div>
-				<div class="col-md-10">
+			<div class="col-md-10">
 				<div class="controls">
-					<table id="contentTable" class="table table-striped table-bordered table-condensed">
+					<table id="contentTable"
+						class="table table-striped table-bordered table-condensed">
 						<thead>
 							<tr>
 								<th class="hide"></th>
 								<th>考试者</th>
 								<th>正确率</th>
-								<th>考试题目</th>
-								<th>创建者</th>
-								<shiro:hasPermission name="bkm:bkmMatch:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 							</tr>
 						</thead>
 						<tbody id="bkmMatchInfoList">
 						</tbody>
-						<shiro:hasPermission name="bkm:bkmMatch:edit"><tfoot>
-							<tr><td colspan="6"><a href="javascript:" onclick="addRow('#bkmMatchInfoList', bkmMatchInfoRowIdx, bkmMatchInfoTpl);bkmMatchInfoRowIdx = bkmMatchInfoRowIdx + 1;" class="btn">新增</a></td></tr>
-						</tfoot></shiro:hasPermission>
 					</table>
 					<script type="text/template" id="bkmMatchInfoTpl">//<!--
 						<tr id="bkmMatchInfoList{{idx}}">
@@ -182,33 +174,144 @@
 							<td>
 								<input id="bkmMatchInfoList{{idx}}_matchRightRate" name="bkmMatchInfoList[{{idx}}].matchRightRate" type="text" value="{{row.matchRightRate}}" class="input-small "/>
 							</td>
-							<td>
-								<input id="bkmMatchInfoList{{idx}}_matchHse" name="bkmMatchInfoList[{{idx}}].matchHse" type="text" value="{{row.matchHse}}" maxlength="3000" class="input-small "/>
-							</td>
-							<td>
-								<input id="bkmMatchInfoList{{idx}}_matchAnswer" name="bkmMatchInfoList[{{idx}}].matchAnswer" type="text" value="{{row.matchAnswer}}" maxlength="3000" class="input-small "/>
-							</td>
-							<shiro:hasPermission name="bkm:bkmMatch:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#bkmMatchInfoList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
 						</tr>//-->
 					</script>
 					<script type="text/javascript">
 						var bkmMatchInfoRowIdx = 0, bkmMatchInfoTpl = $("#bkmMatchInfoTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 						$(document).ready(function() {
+							var matchStat = jQuery("#matchStat").val();
+							if(matchStat=="") {
+								jQuery("#preInfo").show();
+								jQuery("#matchInfo").hide();
+								jQuery("#assignButton").show();
+								jQuery("#preButton").hide();
+								jQuery("#startButton").hide();
+								jQuery("#stopButton").hide();
+							}else if(matchStat=="0") {
+								jQuery("#preInfo").show();
+								jQuery("#matchInfo").hide();
+								jQuery("#assignButton").hide();
+								jQuery("#preButton").hide();
+								jQuery("#startButton").show();
+								jQuery("#stopButton").hide();
+							}else if(matchStat=="1") {
+								jQuery("#preInfo").show();
+								jQuery("#matchInfo").hide();
+								jQuery("#assignButton").hide();
+								jQuery("#preButton").hide();
+								jQuery("#startButton").hide();
+								jQuery("#stopButton").show();
+							}else{
+								jQuery("#preInfo").hide();
+								jQuery("#matchInfo").show();
+								jQuery("#assignButton").hide();
+								jQuery("#preButton").hide();
+								jQuery("#startButton").hide();
+								jQuery("#stopButton").hide();
+							}
 							var data = ${fns:toJson(bkmMatch.bkmMatchInfoList)};
 							for (var i=0; i<data.length; i++){
 								addRow('#bkmMatchInfoList', bkmMatchInfoRowIdx, bkmMatchInfoTpl, data[i]);
 								bkmMatchInfoRowIdx = bkmMatchInfoRowIdx + 1;
 							}
+							$("#assignButton").click(function(){
+								top.jQuery.jBox.open("iframe:${ctx}/bkm/bkmMatch/usertomatch?id=${bkmMatch.id}", "分配角色",810,$(top.document).height()-240,{
+									buttons:{"确定分配":"ok", "清除已选":"clear", "关闭":true}, bottomText:"通过选择部门，然后为列出的人员分配角色。",submit:function(v, h, f){
+										var pre_ids = h.find("iframe")[0].contentWindow.pre_ids;
+										var ids = h.find("iframe")[0].contentWindow.ids;
+										var pre_names = h.find("iframe")[0].contentWindow.pre_names;
+										var names = h.find("iframe")[0].contentWindow.names;
+										//nodes = selectedTree.getSelectedNodes();
+										if (v=="ok"){
+											 $("#bkmMatchInfoPreList tbody").html("");
+											// 删除''的元素
+											if(ids[0]==''){
+												ids.shift();
+												pre_ids.shift();
+											}
+											if(pre_ids.sort().toString() == ids.sort().toString()){
+												top.jQuery.jBox.tip("未给角色【${role.name}】分配新成员！", 'info');
+												return false;
+											};
+									    	var idsArr = "";
+									    	for (var i = 0; i<ids.length; i++) {
+									    		var row = new Object();
+									    		row.id = ids[i];
+									    		row.name = names[i+1];
+									    		row.preStat = 0;
+									    		addPreRow('#bkmMatchInfoPreList', bkmMatchInfoPreRowIdx, bkmMatchInfoPreTpl, row);
+									    		jQuery("#preButton").show();
+									    		idsArr = (idsArr + ids[i]) + (((i + 1)== ids.length) ? '':',');
+									    	}
+									    	$('#idsArr').val(idsArr);
+									    	
+									    	return true;
+										} else if (v=="clear"){
+											h.find("iframe")[0].contentWindow.clearAssign();
+											return false;
+						                }
+									}, loaded:function(h){
+										jQuery(".jbox-content", top.document).css("overflow-y","hidden");
+									}
+								});
+							});
+							$("#preButton").click(function(){
+								$("#inputForm").submit();
+							});
+							$("#startButton").click(function(){
+								jQuery.ajax({
+							        url:'${ctx}/bkm/bkmMatch/startmatch',
+							        type:'post',
+							        dataType:'json',
+							        data:jQuery("#form_data").serialize(),
+							        timeout:5000,
+							        success:function(data, textStatus){
+							        	if(textStatus == "success"){
+							        		//TODO
+							        	}
+							        },
+							        error:function(XMLHttpRequest, textStatus, errorThrown){
+							        	if(textStatus == "timeout"){
+		                                    //有效时间内没有响应，请求超时，重新发请求
+							        		alert("网络超时，请稍后重试！");
+							            }else{
+							                // 其他的错误，如网络错误等
+							            	alert("系统错误，请稍后重试！");
+							            }
+							        }
+								});							
+							});
+							$("#stopButton").click(function(){
+								jQuery.ajax({
+							        url:'${ctx}/bkm/bkmMatch/stopmatch',
+							        type:'post',
+							        dataType:'json',
+							        data:jQuery("#form_data").serialize(),
+							        timeout:5000,
+							        success:function(data, textStatus){
+							        	if(textStatus == "success"){
+							        		//TODO
+							        	}
+							        },
+							        error:function(XMLHttpRequest, textStatus, errorThrown){
+							        	if(textStatus == "timeout"){
+		                                    //有效时间内没有响应，请求超时，重新发请求
+							        		alert("网络超时，请稍后重试！");
+							            }else{
+							                // 其他的错误，如网络错误等
+							            	alert("系统错误，请稍后重试！");
+							            }
+							        }
+								});
+							});
 						});
 					</script>
 				</div>
-				</div>
 			</div>
+		</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="bkm:bkmMatch:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
-			<input id="btnCancel" class="btn btn-info" type="button" value="返 回" onclick="history.go(-1)"/>
+			<input id="btnCancel" class="btn btn-info" type="button" value="返 回"
+				onclick="history.go(-1)" />
 		</div>
 	</form:form>
 </body>

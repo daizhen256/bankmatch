@@ -45,6 +45,8 @@
 		
 		var pre_ids = "${selectIds}".split(",");
 		var ids = "${selectIds}".split(",");
+		var pre_names = "${selectNames}".split(",");
+		var names = "${selectNames}".split(",");
 		
 		//点击选择项回调
 		function treeOnClick(event, treeId, treeNode, clickFlag){
@@ -60,12 +62,14 @@
 				if($.inArray(String(treeNode.id), ids)<0){
 					selectedTree.addNodes(null, treeNode);
 					ids.push(String(treeNode.id));
+					names.push(String(treeNode.name));
 				}
 			};
 			if("selectedTree"==treeId){
 				if($.inArray(String(treeNode.id), pre_ids)<0){
 					selectedTree.removeNode(treeNode);
 					ids.splice($.inArray(String(treeNode.id), ids), 1);
+					names.splice($.inArray(String(treeNode.name), names), 1);
 				}else{
 					top.jQuery.jBox.tip("角色原有成员不能清除！", 'info');
 				}
@@ -81,6 +85,7 @@
 						tips = "已选人员清除成功！";
 					}
 					ids=pre_ids.slice(0);
+					names=pre_names.slice(0);
 					selectedNodes=pre_selectedNodes;
 					jQuery.fn.zTree.init($("#selectedTree"), setting, selectedNodes);
 			    	top.jQuery.jBox.tip(tips, 'info');

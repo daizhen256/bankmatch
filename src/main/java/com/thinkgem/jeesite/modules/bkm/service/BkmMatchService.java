@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.bkm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 	}
 	
 	public List<BkmMatchInfo> findInfoByMatch(BkmMatch bkmMatch){
+		if(StringUtils.isBlank(bkmMatch.getId())) {
+			return new ArrayList<BkmMatchInfo>();
+		}
 		BkmMatchInfo bkmMatchInfo = new BkmMatchInfo();
 		bkmMatchInfo.setMatchId(bkmMatch.getId());
 		List<BkmMatchInfo> list = bkmMatchInfoDao.findList(bkmMatchInfo);
@@ -57,9 +61,6 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 	public void save(BkmMatch bkmMatch) {
 		super.save(bkmMatch);
 		for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
-			if (bkmMatchInfo.getId() == null){
-				continue;
-			}
 			if (BkmMatchInfo.DEL_FLAG_NORMAL.equals(bkmMatchInfo.getDelFlag())){
 				if (StringUtils.isBlank(bkmMatchInfo.getId())){
 					bkmMatchInfo.setMatchId(bkmMatch.getId());
