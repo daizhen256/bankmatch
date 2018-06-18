@@ -15,6 +15,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.pre_stat AS "preStat",
 		u2.name AS "matchUser.name"
 	</sql>
 	
@@ -86,7 +87,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			pre_stat
 		) VALUES (
 			#{id},
 			#{matchId},
@@ -99,7 +101,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{preStat}
 		)
 	</insert>
 	
@@ -109,6 +112,18 @@
 			match_right_rate = #{matchRightRate},
 			match_hse = #{matchHse},
 			match_answer = #{matchAnswer}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateState">
+		UPDATE bkm_match_info SET 	
+			pre_stat = #{preStat}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateHse">
+		UPDATE bkm_match_info SET 	
+			match_hse = #{matchHse}
 		WHERE id = #{id}
 	</update>
 	

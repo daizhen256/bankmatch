@@ -68,6 +68,49 @@
 				}
 			}); */
 		}
+		function getPreInfo(){
+			jQuery.ajax({
+		        url:'${ctx}/bkm/bkmMatch/getmatchpre?id='+jQuery("#id").val(),
+		        type:'get',
+		        dataType:'json',
+		        timeout:5000,
+		        success:function(data, textStatus){
+		            if(data && data.result){
+		                 //这个是用来和后台数据作对比判断是否发生了改变
+		                var messagelist = data.result.data;
+		                var tablerow = jQuery("#bkmMatchInfoList").children();
+		                for(var i = 0;i<messagelist.length;i++) {
+		                	for(var j = 0;j<tablerow.size();j++) {
+		                		if(tablerow[j].children[1].children[1].value==messagelist[i].matchUser.id) {
+		                			if(messagelist[i].preStat=="0") {
+		                				tablerow[j].children[2].innerText = "未准备";
+		                			} else if(messagelist[i].preStat=="1") {
+		                				tablerow[j].children[2].innerText = "准备就绪";
+		                			}else{
+		                				tablerow[j].children[2].innerText = "考试完毕";
+		                			}
+		                			continue;
+		                		}
+		                	}
+		                }
+		                
+		            } 
+		            if(textStatus == "success"){
+		                                    //成功之后，再发送请求，递归调用
+		                setTimeout('getPreInfo()',1000);
+		            }
+		        },
+		        error:function(XMLHttpRequest, textStatus, errorThrown){
+		            if(textStatus == "timeout"){
+		                                    //有效时间内没有响应，请求超时，重新发请求
+		            	setTimeout('getPreInfo()',1000);
+		            }else{
+		                                    // 其他的错误，如网络错误等
+		            	setTimeout('getPreInfo()',1000);
+		            }
+		        }
+		    });
+		}
 	</script>
 </head>
 <body>
@@ -112,7 +155,6 @@
 							<tr>
 								<th class="hide"></th>
 								<th>考试者</th>
-								<th>准备情况</th>
 								<th width="10">&nbsp;</th>
 							</tr>
 						</thead>
@@ -128,9 +170,6 @@
 							<td>
 								<input id="bkmMatchInfoPreList{{idx}}_matchUser" name="bkmMatchInfoList[{{idx}}].matchUser.name" type="text" value="{{row.name}}" maxlength="64" class="input-small required"/>
 								<input id="bkmMatchInfoPreList{{idx}}_matchUserId" name="bkmMatchInfoList[{{idx}}].matchUser.id" type="hidden" value="{{row.id}}"/>
-							</td>
-							<td>
-								<input id="bkmMatchInfoPreList{{idx}}_preStat" name="bkmMatchInfoList[{{idx}}].preStat" type="text" value="{{row.preStat}}" class="input-small "/>
 							</td>
 							<td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#bkmMatchInfoPreList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
@@ -155,6 +194,7 @@
 							<tr>
 								<th class="hide"></th>
 								<th>考试者</th>
+								<th>准备情况</th>
 								<th>正确率</th>
 							</tr>
 						</thead>
@@ -171,8 +211,11 @@
 								<input id="bkmMatchInfoList{{idx}}_matchUser" name="bkmMatchInfoList[{{idx}}].matchUser.name" type="text" value="{{row.matchUser.name}}" maxlength="64" class="input-small required"/>
 								<input id="bkmMatchInfoList{{idx}}_matchUserId" name="bkmMatchInfoList[{{idx}}].matchUser.id" type="hidden" value="{{row.matchUser.id}}"/>
 							</td>
+							<td align="center">
+								{{row.preStat}}
+							</td>
 							<td>
-								<input id="bkmMatchInfoList{{idx}}_matchRightRate" name="bkmMatchInfoList[{{idx}}].matchRightRate" type="text" value="{{row.matchRightRate}}" class="input-small "/>
+								<input id="bkmMatchInfoList{{idx}}_matchRightRate" name="bkmMatchInfoList[{{idx}}].matchRightRate" type="text" value="{{row.matchRightRate}}" style="text-align: right" class="input-small "/>%
 							</td>
 						</tr>//-->
 					</script>
@@ -188,19 +231,21 @@
 								jQuery("#startButton").hide();
 								jQuery("#stopButton").hide();
 							}else if(matchStat=="0") {
-								jQuery("#preInfo").show();
-								jQuery("#matchInfo").hide();
+								jQuery("#preInfo").hide();
+								jQuery("#matchInfo").show();
 								jQuery("#assignButton").hide();
 								jQuery("#preButton").hide();
 								jQuery("#startButton").show();
 								jQuery("#stopButton").hide();
+								getPreInfo();
 							}else if(matchStat=="1") {
-								jQuery("#preInfo").show();
-								jQuery("#matchInfo").hide();
+								jQuery("#preInfo").hide();
+								jQuery("#matchInfo").show();
 								jQuery("#assignButton").hide();
 								jQuery("#preButton").hide();
 								jQuery("#startButton").hide();
 								jQuery("#stopButton").show();
+								getPreInfo();
 							}else{
 								jQuery("#preInfo").hide();
 								jQuery("#matchInfo").show();
@@ -263,11 +308,12 @@
 							        url:'${ctx}/bkm/bkmMatch/startmatch',
 							        type:'post',
 							        dataType:'json',
-							        data:jQuery("#form_data").serialize(),
+							        data:jQuery("#inputForm").serialize(),
 							        timeout:5000,
 							        success:function(data, textStatus){
 							        	if(textStatus == "success"){
-							        		//TODO
+							        		jQuery("#startButton").hide();
+											jQuery("#stopButton").show();
 							        	}
 							        },
 							        error:function(XMLHttpRequest, textStatus, errorThrown){
@@ -286,11 +332,12 @@
 							        url:'${ctx}/bkm/bkmMatch/stopmatch',
 							        type:'post',
 							        dataType:'json',
-							        data:jQuery("#form_data").serialize(),
+							        data:jQuery("#inputForm").serialize(),
 							        timeout:5000,
 							        success:function(data, textStatus){
 							        	if(textStatus == "success"){
-							        		//TODO
+							        		jQuery("#startButton").hide();
+											jQuery("#stopButton").hide();
 							        	}
 							        },
 							        error:function(XMLHttpRequest, textStatus, errorThrown){

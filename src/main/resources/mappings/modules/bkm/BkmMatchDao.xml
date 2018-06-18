@@ -104,11 +104,8 @@
 	</insert>
 	
 	<update id="update">
-		UPDATE bkm_match SET 	
-			match_date = #{matchDate},
-			match_name = #{matchName},
-			match_people_count = #{matchPeopleCount},
-			match_average_point = #{matchAveragePoint}
+		UPDATE bkm_match SET
+			match_stat = #{matchStat}
 		WHERE id = #{id}
 	</update>
 	
