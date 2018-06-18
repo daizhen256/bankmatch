@@ -159,6 +159,11 @@ function nexthsr() {
 		document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer;
 	}
 }
+function randomNum(weisu){
+	var minNum = Math.pow(10,weisu-1);
+	var maxNum = Math.pow(10,weisu)-1;
+    return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10)+"."+parseInt(Math.random()*100,10); 
+} 
 
 </script>
 </head>
