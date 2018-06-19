@@ -99,11 +99,13 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 	public void startMatch(BkmMatch bkmMatch) {
 		bkmMatch.setMatchStat("1");
 		super.save(bkmMatch);
+		if(bkmMatch.getHsrType()==0) {
 		JSONArray matchHse = getMatchHse(); 
-		for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
-			bkmMatchInfo.setMatchHse(matchHse.toJSONString());
-			bkmMatchInfo.preUpdate();
-			bkmMatchInfoDao.updateHse(bkmMatchInfo);
+			for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
+				bkmMatchInfo.setMatchHse(matchHse.toJSONString());
+				bkmMatchInfo.preUpdate();
+				bkmMatchInfoDao.updateHse(bkmMatchInfo);
+			}
 		}
 	}
 	

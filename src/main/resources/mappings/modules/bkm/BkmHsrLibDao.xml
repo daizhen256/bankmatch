@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.bkm.dao.BkmHsrLibDao">
+    
+	<sql id="bkmHsrLibColumns">
+		a.id AS "id",
+		a.hsr_lib_id AS "hsrLibId",
+		a.hsr_question AS "hsrQuestion",
+		a.hsr_right_answer AS "hsrRightAnswer",
+		a.hsr_used_time AS "hsrUsedTime",
+		a.hsr_right_time AS "hsrRightTime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="bkmHsrLibJoins">
+	</sql>
+    
+	<select id="get" resultType="BkmHsrLib">
+		SELECT 
+			<include refid="bkmHsrLibColumns"/>
+		FROM bkm_hsr_lib a
+		<include refid="bkmHsrLibJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BkmHsrLib">
+		SELECT 
+			<include refid="bkmHsrLibColumns"/>
+		FROM bkm_hsr_lib a
+		<include refid="bkmHsrLibJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="hsrQuestion != null and hsrQuestion != ''">
+				AND a.hsr_question = #{hsrQuestion}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BkmHsrLib">
+		SELECT 
+			<include refid="bkmHsrLibColumns"/>
+		FROM bkm_hsr_lib a
+		<include refid="bkmHsrLibJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO bkm_hsr_lib(
+			id,
+			hsr_question,
+			hsr_right_answer,
+			hsr_used_time,
+			hsr_right_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{hsrQuestion},
+			#{hsrRightAnswer},
+			#{hsrUsedTime},
+			#{hsrRightTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE bkm_hsr_lib SET 	
+			hsr_question = #{hsrQuestion},
+			hsr_right_answer = #{hsrRightAnswer},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE bkm_hsr_lib SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

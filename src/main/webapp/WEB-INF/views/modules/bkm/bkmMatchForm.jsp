@@ -183,7 +183,7 @@
 			</div>
 			<div class="col-md-10">
 				<div class="form-group">
-					<form:radiobuttons path="hsrType" items="${fns:getDictList('matchType')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+					<form:radiobuttons path="hsrType" items="${fns:getDictList('hsr_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 				</div>
 			</div>
 		</div>
