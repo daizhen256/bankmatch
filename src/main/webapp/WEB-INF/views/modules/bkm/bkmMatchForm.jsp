@@ -143,6 +143,50 @@
 				</div>
 			</div>
 		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">开始时间：</label>
+			</div>
+			<div class="col-md-10">
+				<div class="form-group">
+					<input name="matchStartDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${bkmMatch.matchStartDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">题目数量：</label>
+			</div>
+			<div class="col-md-10">
+				<div class="form-group">
+					<form:input path="hsrNum" htmlEscape="false" maxlength="256"
+						class="input-xlarge required" />
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">考试时间：</label>
+			</div>
+			<div class="col-md-10">
+				<div class="form-group">
+					<form:input path="matchTime" htmlEscape="false" maxlength="256"
+						class="input-xlarge required" />
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">考题类型：</label>
+			</div>
+			<div class="col-md-10">
+				<div class="form-group">
+					<form:radiobuttons path="hsrType" items="${fns:getDictList('matchType')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				</div>
+			</div>
+		</div>
 		<div class="control-group" id="preInfo">
 			<div class="col-md-2">
 				<label class="control-label">考试准备情况：</label>
@@ -300,9 +344,11 @@
 									}
 								});
 							});
+							// 准备考试
 							$("#preButton").click(function(){
 								$("#inputForm").submit();
 							});
+							// 开始考试
 							$("#startButton").click(function(){
 								jQuery.ajax({
 							        url:'${ctx}/bkm/bkmMatch/startmatch',
@@ -327,6 +373,8 @@
 							        }
 								});							
 							});
+							
+							// 结束考试
 							$("#stopButton").click(function(){
 								jQuery.ajax({
 							        url:'${ctx}/bkm/bkmMatch/stopmatch',

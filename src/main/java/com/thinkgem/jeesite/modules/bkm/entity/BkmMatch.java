@@ -27,6 +27,11 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 	private String matchStat;			// 考试状态
 	private List<BkmMatchInfo> bkmMatchInfoList = Lists.newArrayList();		// 子表列表
 	
+	private Date matchStartDate; //开始时间 为空则需要管理员确认
+	private int hsrNum; //试题数量，为空则不限制
+	private int matchTime; //考试时间（分钟）
+	private int hsrType; //试题类型 0:统一随机题   1:每人随机题   2:题库题
+	
 	public BkmMatch() {
 		super();
 	}
@@ -84,6 +89,38 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 
 	public void setMatchStat(String matchStat) {
 		this.matchStat = matchStat;
+	}
+
+	public Date getMatchStartDate() {
+		return matchStartDate;
+	}
+
+	public void setMatchStartDate(Date matchStartDate) {
+		this.matchStartDate = matchStartDate;
+	}
+
+	public int getHsrNum() {
+		return hsrNum;
+	}
+
+	public void setHsrNum(int hsrNum) {
+		this.hsrNum = hsrNum;
+	}
+
+	public int getMatchTime() {
+		return matchTime;
+	}
+
+	public void setMatchTime(int matchTime) {
+		this.matchTime = matchTime;
+	}
+
+	public int getHsrType() {
+		return hsrType;
+	}
+
+	public void setHsrType(int hsrType) {
+		this.hsrType = hsrType;
 	}
 	
 }
