@@ -8,211 +8,107 @@
 <link href="${ctxStatic}/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="${ctxStatic}/css/thin-jeesite.css" type="text/css" rel="stylesheet" media="screen" />
 <style>
-html,
-body {
-  background-color: #F4F4F4;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  font-family: "Work Sans", sans-serif;
-  justify-content: center;
-}
-
-.exp-container {
-  width: 100%;
-  padding: 30px;
-  box-sizing: border-box;
-  max-width: 600px;
-}
-
-.exp {
-  display: flex;
-  flex-direction: column-reverse;
-  width: 100%;
-  margin-bottom: 30px;
-  position: relative;
-  flex-wrap: wrap;
-}
-
-.exp__label {
-  transition: 0.3s;
-  margin-bottom: 5px;
-}
-
-.exp__label:before {
-  content: attr(data-icon);
-  font-weight: normal;
-  font-family: "Ionicons";
-  font-size: 24px;
-  position: absolute;
-  left: 0;
-  transform: rotateY(90deg);
-  bottom: 0;
-  height: 52px;
-  background: transparent;
-  color: #000;
-  transform-origin: left;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color .3s 0s ease, transform .3s 0s ease;
-  width: 42px;
-}
-
-.exp__input {
-  border: 1px solid #ddd;
-  padding: 0 10px;
-  width: 100%;
-  height: 52px;
-  transition: 0.3s;
-  font-weight: normal;
-  box-sizing: border-box;
-  font-family: "Work Sans", sans-serif;
-  outline: none;
-}
-
-.exp__input:focus {
-  padding-left: 42px;
-  border-color: #bbb;
-}
-
-.exp__input:focus + label:before {
-  transform: rotateY(0deg);
-}
-
-.exp__input:valid {
-  padding-left: 42px;
-  border-color: green;
-}
-
-.exp__input:valid + label {
-  color: green;
-}
-
-.exp__input:valid + label:before {
-  transform: rotateY(0deg);
-  color: green;
-  font-size: 34px;
-  content: attr(data-icon-ok);
-}
-
-.exp-title {
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 30px;
-  font-weight: normal;
-}
-
-.exp-title span {
-  display: inline-block;
-  padding: 5px;
-  font-size: 22px;
-  background: #feffd4;
-}
+body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-family:Work Sans,sans-serif;align-items:center;justify-content:center}.exp-container{box-sizing:border-box;padding:30px;width:100%;max-width:600px}.exp{position:relative;display:flex;margin-bottom:30px;width:100%;flex-direction:column-reverse;flex-wrap:wrap}.exp__label{margin-bottom:5px;transition:.3s}.exp__label:before{position:absolute;bottom:0;left:0;display:flex;width:42px;height:52px;background:0 0;color:#000;content:attr(data-icon);font-weight:400;font-size:24px;font-family:Ionicons;transition:color .3s 0s ease,transform .3s 0s ease;transform:rotateY(90deg);transform-origin:left;align-items:center;justify-content:center}.exp__input{box-sizing:border-box;padding:0 10px;width:100%;height:52px;outline:0;border:1px solid #ddd;font-weight:400;font-family:Work Sans,sans-serif;transition:.3s}.exp__input:focus{padding-left:42px;border-color:#bbb}.exp__input:focus+label:before{transform:rotateY(0)}.exp__input:valid{padding-left:42px;border-color:green}.exp__input:valid+label{color:green}.exp__input:valid+label:before{color:green;content:attr(data-icon-ok);font-size:34px;transform:rotateY(0)}.exp-title{margin-bottom:30px;text-align:center;font-weight:400;font-size:22px}.exp-title span{display:inline-block;padding:5px;background:#feffd4;font-size:22px}
 </style>
 <script type="text/javascript">
-var subindex = 0;
-var hsr;
-var matchStat;
-var answer;
-var question;
-window.onload=function(){
-    $(document).keydown(function(event){
-        switch(event.keyCode) {
-                                case 13:{
-                                	nexthsr();
-                                }
-                               }
-    })
-}
-$(document).ready(function() {
-	jQuery("#shengyutime").hide();
-	var preStat = '${bkmMatch.bkmMatchInfoList[0].preStat}';
-	matchStat = '${bkmMatch.matchStat}';
-	hsr = '${bkmMatch.bkmMatchInfoList[0].matchHse}';
-	if(preStat=='未准备') {
-		jQuery(".exp").hide();
-		jQuery("#submitForm").hide();
-		jQuery("#inputForm").show();
-	}else{
-		if(matchStat==1) {
-			jQuery("#shengyutime").show();
-			leftTimer();
-			if(jQuery("#hsrType").val==0) {
-				jQuery(".exp").show();
-				jQuery("#submitForm").show();
-				jQuery("#inputForm").hide();
-				hsr = JSON.parse(hsr);
-				nexthsr();
-			}else if(jQuery("#hsrType").val==1){
-				jQuery(".exp").show();
-				jQuery("#submitForm").show();
-				jQuery("#inputForm").hide();
-				nextrandomhsr();
-			}else{
-				
+	var subindex = 0;
+	var hsr;
+	var matchStat;
+	var answer;
+	var question;
+	window.onload = function() {
+		$(document).keydown(function(event) {
+			switch (event.keyCode) {
+			case 13:
+				{
+					nexthsr()
+				}
 			}
-			
-		}else{
-			jQuery(".exp").show();
+		})
+	}
+	$(document).ready(function() {
+		jQuery("#shengyutime").hide();
+		var preStat = '${bkmMatch.bkmMatchInfoList[0].preStat}';
+		matchStat = '${bkmMatch.matchStat}';
+		hsr = '${bkmMatch.bkmMatchInfoList[0].matchHse}';
+		if (preStat == '未准备') {
+			jQuery(".exp").hide();
 			jQuery("#submitForm").hide();
-			jQuery("#inputForm").hide();
-			jQuery("#example").val('考试尚未开始，请等待管理员确认');
+			jQuery("#inputForm").show()
+		} else {
+			if (matchStat == 1) {
+				jQuery("#shengyutime").show();
+				leftTimer();
+				if (jQuery("#hsrType").val() == 0) {
+					jQuery(".exp").show();
+					jQuery("#submitForm").show();
+					jQuery("#inputForm").hide();
+					hsr = JSON.parse(hsr);
+					nexthsr()
+				} else if (jQuery("#hsrType").val() == 1) {
+					jQuery(".exp").show();
+					jQuery("#submitForm").show();
+					jQuery("#inputForm").hide();
+					nextrandomhsr()
+				} else {}
+			} else {
+				jQuery(".exp").show();
+				jQuery("#submitForm").hide();
+				jQuery("#inputForm").hide();
+				jQuery("#example").val('考试尚未开始，请等待管理员确认')
+			}
+		}
+	});
+	
+	function nexthsr() {
+		jQuery("#example").val(hsr[subindex].question);
+		answer = answer + jQuery("#example2").val() + ',';
+		subindex++;
+		jQuery("#example2").val('');
+		jQuery("#example2").focus();
+		if (subindex == hsr.length) {
+			jQuery("#btnNext").hide();
+			document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer
 		}
 	}
-});
-function nexthsr() {
-	jQuery("#example").val(hsr[subindex].question);
-	answer = answer + jQuery("#example2").val() + ',';
-	subindex++;
-	jQuery("#example2").val('');
-	jQuery("#example2").focus();
-	if(subindex==hsr.length) {
-		jQuery("#btnNext").hide();
-		document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer;
+	function nextrandomhsr() {
+		var hsrNum = jQuery("#hsrNum").val();
+		var randomquestion = randomNum(5);
+		jQuery("#example").val(randomquestion);
+		question = question + randomquestion + ',';
+		answer = answer + jQuery("#example2").val() + ',';
+		subindex++;
+		jQuery("#example2").val('');
+		jQuery("#example2").focus();
+		if (hsrNum != '' && subindex == hsrNum) {
+			jQuery("#btnNext").hide();
+			document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer
+		}
 	}
-}
-function nextrandomhsr() {
-	var hsrNum = jQuery("#hsrNum").val();
-	var randomquestion = randomNum(5);
-	jQuery("#example").val(randomquestion);
-	question = question + randomquestion + ',';
-	answer = answer + jQuery("#example2").val() + ',';
-	subindex++;
-	jQuery("#example2").val('');
-	jQuery("#example2").focus();
-	if(hsrNum!=''&&subindex==hsrNum) {
-		jQuery("#btnNext").hide();
-		document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer;
+	function randomNum(weisu) {
+		var minNum = Math.pow(10, weisu - 1);
+		var maxNum = Math.pow(10, weisu) - 1;
+		return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10) + "." + parseInt(Math.random() * 100, 10)
 	}
-}
-function randomNum(weisu){
-	var minNum = Math.pow(10,weisu-1);
-	var maxNum = Math.pow(10,weisu)-1;
-    return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10)+"."+parseInt(Math.random()*100,10); 
-} 
-function leftTimer(year,month,day,hour,minute,second){ 
-	  var leftTime = (new Date(year,month-1,day,hour,minute,second)) - (new Date()); //计算剩余的毫秒数 
-	  var days = parseInt(leftTime / 1000 / 60 / 60 / 24 , 10); //计算剩余的天数 
-	  var hours = parseInt(leftTime / 1000 / 60 / 60 % 24 , 10); //计算剩余的小时 
-	  var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟 
-	  var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数 
-	  days = checkTime(days); 
-	  hours = checkTime(hours); 
-	  minutes = checkTime(minutes); 
-	  seconds = checkTime(seconds); 
-	  setInterval("leftTimer(2018,6,19,21,45,00)",1000); 
-	  document.getElementById("timer").innerHTML = days+"天" + hours+"小时" + minutes+"分"+seconds+"秒";  
-	} 
-	function checkTime(i){ //将0-9的数字前面加上0，例1变为01 
-	  if(i<10) 
-	  { 
-	    i = "0" + i; 
-	  } 
-	  return i; 
-	} 
-
+	function leftTimer(year, month, day, hour, minute, second) {
+		var leftTime = (new Date(year, month - 1, day, hour, minute, second)) - (new Date());
+		var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10);
+		var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10);
+		var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);
+		var seconds = parseInt(leftTime / 1000 % 60, 10);
+		days = checkTime(days);
+		hours = checkTime(hours);
+		minutes = checkTime(minutes);
+		seconds = checkTime(seconds);
+		setInterval("leftTimer(2018,6,19,21,45,00)", 1000);
+		document.getElementById("timer").innerHTML = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒"
+	}
+	function checkTime(i) {
+		if (i < 10) {
+			i = "0" + i
+		}
+		return i
+	}
 </script>
 </head>
 <body>
@@ -237,11 +133,13 @@ function leftTimer(year,month,day,hour,minute,second){
 	</form:form>
 	  	<form:form id="submitForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/matchok" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		matchStartDate
 		<form:hidden path="matchTime"/>
 		<form:hidden path="hsrNum"/>
 		<form:hidden path="hsrType"/>
 		<form:hidden path="bkmMatchInfoList[0].matchHse"/>
 		<form:hidden path="bkmMatchInfoList[0].matchAnswer"/>
+		<input type="hidden" id="matchStartDate" value="<fmt:formatDate value="${bkmMatch.matchStartDate}" pattern="yyyy-MM-dd HH:mm:ss"/>">
 		<div class="form-actions">
 			<div style="text-align: center;">
 				<input id="btnSubmit" class="btn btn-primary" type="submit" value="交卷"/>&nbsp;
