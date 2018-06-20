@@ -30,7 +30,6 @@ public class BkmHsrLib extends DataEntity<BkmHsrLib> {
 		super(id);
 	}
 
-	@NotNull(message="题目ID不能为空")
 	public Long getHsrLibId() {
 		return hsrLibId;
 	}

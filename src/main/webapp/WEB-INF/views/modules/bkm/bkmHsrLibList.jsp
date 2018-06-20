@@ -11,7 +11,19 @@
 	<link rel="stylesheet" type="text/css" href="${ctxStatic}/css/skin_/table.css" />
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+			$("#btnExport").click(function(){
+				top.jQuery.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
+					if(v=="ok"){
+						$("#searchForm").attr("action","${ctx}/sys/user/export");
+						$("#searchForm").submit();
+					}
+				},{buttonsFocus:1});
+				top.jQuery('.jbox-body .jbox-icon').css('top','55px');
+			});
+			$("#btnImport").click(function(){
+				jQuery.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
+					bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
+			});
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -22,6 +34,14 @@
 	</script>
 </head>
 <body>
+	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/sys/user/import" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+			<a href="${ctx}/sys/user/import/template">下载模板</a>
+		</form>
+	</div>
 	<div class="page-content">
 	<form:form id="searchForm" modelAttribute="bkmHsrLib" action="${ctx}/bkm/bkmHsrLib/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -29,7 +49,11 @@
 			<label>题干：</label>
 				<form:input path="hsrQuestion" htmlEscape="false" maxlength="255" class="input-medium"/>
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
-			<shiro:hasPermission name="bkm:bkmHsrLib:edit"><a class="btn btn-s-md btn-primary" href="${ctx}/bkm/bkmHsrLib/form">题库信息添加</a></shiro:hasPermission>
+			<shiro:hasPermission name="bkm:bkmHsrLib:edit">
+				<a class="btn btn-s-md btn-primary" href="${ctx}/bkm/bkmHsrLib/form">题库信息添加</a>
+				<input id="btnExport" class="btn btn-s-md btn-primary" type="button" value="导出"/>
+				<input id="btnImport" class="btn btn-s-md btn-primary" type="button" value="导入"/>
+			</shiro:hasPermission>
 	</form:form>
 	<sys:message content="${message}"/>
 	<div class="table">

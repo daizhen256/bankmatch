@@ -21,7 +21,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			switch (event.keyCode) {
 			case 13:
 				{
-					nexthsr()
+					next()
 				}
 			}
 		})
@@ -49,7 +49,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 					jQuery(".exp").show();
 					jQuery("#submitForm").show();
 					jQuery("#inputForm").hide();
-					nextrandomhsr()
+					nextrandomhsr();
 				} else {}
 			} else {
 				jQuery(".exp").show();
@@ -59,7 +59,15 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			}
 		}
 	});
-	
+	function next() {
+		if (jQuery("#hsrType").val() == 0) {
+			nexthsr();
+		} else if (jQuery("#hsrType").val() == 1) {
+			nextrandomhsr();
+		}else{
+			
+		}
+	}
 	function nexthsr() {
 		jQuery("#example").val(hsr[subindex].question);
 		answer = answer + jQuery("#example2").val() + ',';
@@ -100,8 +108,20 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		hours = checkTime(hours);
 		minutes = checkTime(minutes);
 		seconds = checkTime(seconds);
-		setInterval("leftTimer(2018,6,19,21,45,00)", 1000);
+		var enddate = jQuery("#matchStartDate").val();
+		var year = enddate.split(" ")[0].split("-")[0];
+		var month = enddate.split(" ")[0].split("-")[1];
+		var day = enddate.split(" ")[0].split("-")[2];
+		var hour = enddate.split(" ")[1].split(":")[0];
+		var minute = enddate.split(" ")[1].split(":")[1];
+		var second = enddate.split(" ")[1].split(":")[2];
+		var sed = setInterval("leftTimer("+year+","+month+","+day+","+hour+","+minute+","+second+")", 1000);
 		document.getElementById("timer").innerHTML = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒"
+		if(days==0&&hours==0&&minutes==0&&seconds==0) {
+			jQuery("#shengyutime").hide();
+			alert("考试结束");
+			jQuery("btnNext").attr("disabled","disabled");
+		}
 	}
 	function checkTime(i) {
 		if (i < 10) {
@@ -133,7 +153,6 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	</form:form>
 	  	<form:form id="submitForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/matchok" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		matchStartDate
 		<form:hidden path="matchTime"/>
 		<form:hidden path="hsrNum"/>
 		<form:hidden path="hsrType"/>
@@ -143,7 +162,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		<div class="form-actions">
 			<div style="text-align: center;">
 				<input id="btnSubmit" class="btn btn-primary" type="submit" value="交卷"/>&nbsp;
-				<input id="btnNext" class="btn btn-info" type="button" value="下一题" onclick="nexthsr()"/>
+				<input id="btnNext" class="btn btn-info" type="button" value="下一题" onclick="next()"/>
 			</div>
 		</div>
 	</form:form>

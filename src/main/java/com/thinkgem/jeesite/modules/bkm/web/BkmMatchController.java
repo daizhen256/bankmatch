@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.bkm.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -187,6 +188,10 @@ public class BkmMatchController extends BaseController {
 			}
 		}
 		bkmMatch.setBkmMatchInfoList(bkmMatchInfoList);
+		Calendar calendar = Calendar.getInstance(); //得到日历
+		calendar.setTime(bkmMatch.getMatchStartDate());//把当前时间赋给日历
+		calendar.add(Calendar.MINUTE, bkmMatch.getMatchTime());  //设置为前2月
+		bkmMatch.setMatchStartDate(calendar.getTime());
 		model.addAttribute("bkmMatch", bkmMatch);
 		return "modules/bkm/bkmMatchWrite";
 	}
@@ -203,6 +208,10 @@ public class BkmMatchController extends BaseController {
 			}
 		}
 		bkmMatch.setBkmMatchInfoList(bkmMatchInfoList);
+		Calendar calendar = Calendar.getInstance(); //得到日历
+		calendar.setTime(bkmMatch.getMatchStartDate());//把当前时间赋给日历
+		calendar.add(Calendar.MINUTE, bkmMatch.getMatchTime());  //设置为前2月
+		bkmMatch.setMatchStartDate(calendar.getTime());
 		model.addAttribute("bkmMatch", bkmMatch);
 		return "modules/bkm/bkmMatchWrite";
 	}
