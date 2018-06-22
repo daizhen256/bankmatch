@@ -19,8 +19,8 @@
             <i class="sidebar-hide"></i>
             <h2><a href="javascript:;"><i class="h2-icon" title="切换到树型结构"></i><span id="menutitle">我的面板</span></a></h2>
             <ul class="nav">
-            	<li class="subnav-li" data-id="1" href="/jeesite/a/sys/menu/inithome">
-					<a data-id="1" href="/jeesite/a/sys/menu/inithome" target="mainIFrame">
+            	<li class="subnav-li" data-id="1" href="/bankmatch/a/sys/menu/inithome">
+					<a data-id="1" href="/bankmatch/a/sys/menu/inithome" target="mainIFrame">
 						<i class="subnav-icon"></i><span class="subnav-text">首页</span>
 					</a>
 				</li>

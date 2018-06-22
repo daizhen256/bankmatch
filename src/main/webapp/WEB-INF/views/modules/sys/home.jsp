@@ -95,7 +95,6 @@
                         
                     </h2>
                     <div class="content-bd">
-                    	<img src="img/skin_/pic1.png" />
                     </div>
                 </li>
                 <li class="content-item dothings">
@@ -110,26 +109,6 @@
                     </h2>
                     <div class="content-bd">
                     	<ul class="content-list things">
-                        	<li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">查干湖冬捕壮观景象</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">江西新余：一座城为重病男童圆梦</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">学生建4.5平米1室1厅1厨1卫 欲申请专利</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">央视直播曝光中纪委办公区</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">盘点那些年曾“脱光光”的十大女星</a>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -145,26 +124,7 @@
                     </h2>
                     <div class="content-bd">
                     	<ul class="content-list things">
-                        	<li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">查干湖冬捕壮观景象</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">江西新余：一座城为重病男童圆梦</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">学生建4.5平米1室1厅1厨1卫 欲申请专利</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">央视直播曝光中纪委办公区</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">盘点那些年曾“脱光光”的十大女星</a>
-                            </li>
+                        	
                         </ul>
                     </div>
                 </li>
@@ -180,7 +140,6 @@
                     	<span class="title">数据统计</span>
                     </h2>
                     <div class="content-bd">
-                    	<img src="img/skin_/pic2.png" />
                     </div>
                 </li>
                 
@@ -196,26 +155,7 @@
                     </h2>
                     <div class="content-bd">
                     	<ul class="content-list things">
-                        	<li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">查干湖冬捕壮观景象</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">江西新余：一座城为重病男童圆梦</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">学生建4.5平米1室1厅1厨1卫 欲申请专利</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">央视直播曝光中纪委办公区</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">盘点那些年曾“脱光光”的十大女星</a>
-                            </li>
+                        	
                         </ul>
                     </div>
                 </li>
@@ -232,26 +172,7 @@
                     </h2>
                     <div class="content-bd">
                     	<ul class="content-list things">
-                        	<li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">查干湖冬捕壮观景象</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">江西新余：一座城为重病男童圆梦</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">学生建4.5平米1室1厅1厨1卫 欲申请专利</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">央视直播曝光中纪委办公区</a>
-                            </li>
-                            <li class="content-list-item">
-                            	<i class="icon"></i>
-                                <a href="javascript:;">盘点那些年曾“脱光光”的十大女星</a>
-                            </li>
+                        	
                         </ul>
                     </div>
                 </li>

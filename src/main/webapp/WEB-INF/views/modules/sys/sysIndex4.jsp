@@ -358,10 +358,10 @@ $(window).load(function() {
     	<div class="ft1 ue-clear">
         	<i class="ft-icon1"></i>
             <span>${fns:getConfig('productName')}</span>
-            <em>Copyright &copy; 2012-${fns:getConfig('copyrightYear')}</em>
+            <em>Copyright &copy; 2017-${fns:getConfig('copyrightYear')}</em>
         </div>
         <div class="ft2 ue-clear">
-        	<span>Powered By <a href="http://jeesite.com" target="_blank">JeeSite</a></span>
+        	<span>Powered By <a href="javascript:void(0);" onClick="alert('官网建设中……')" target="_blank">广智科技</a></span>
             <em>${fns:getConfig('version')}</em>
             <i class="ft-icon2"></i>
         </div>

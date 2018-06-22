@@ -135,12 +135,12 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 <div class="exp-container">
   <h2 class="exp-title">${bkmMatch.matchName}</h2>       <span id="shengyutime">剩余时间：</span><div id="timer"></div> 
   <div class="exp">
-    <input type="text" class="exp__input" id="example" name="test" placeholder="Full Name">
-    <label class="exp__label" for="example">Full Name</label>
+    <input type="text" class="exp__input" id="example" name="test">
+    <label class="exp__label" for="example">一次录入数据</label>
   </div>
   <div class="exp">
-    <input type="email" class="exp__input" id="example2" name="test" placeholder="Email">
-    <label class="exp__label" for="example2">Email</label>
+    <input type="email" class="exp__input" id="example2" name="test">
+    <label class="exp__label" for="example2">二次录入数据</label>
   </div>
   	<form:form id="inputForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/prepareok" method="post" class="form-horizontal">
 		<form:hidden path="id"/>

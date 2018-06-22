@@ -304,8 +304,8 @@
 								bkmMatchInfoRowIdx = bkmMatchInfoRowIdx + 1;
 							}
 							$("#assignButton").click(function(){
-								top.jQuery.jBox.open("iframe:${ctx}/bkm/bkmMatch/usertomatch?id=${bkmMatch.id}", "分配角色",810,$(top.document).height()-240,{
-									buttons:{"确定分配":"ok", "清除已选":"clear", "关闭":true}, bottomText:"通过选择部门，然后为列出的人员分配角色。",submit:function(v, h, f){
+								top.jQuery.jBox.open("iframe:${ctx}/bkm/bkmMatch/usertomatch?id=${bkmMatch.id}", "选择考试人员",810,$(top.document).height()-240,{
+									buttons:{"确定选择":"ok", "清除已选":"clear", "关闭":true}, bottomText:"通过选择部门，然后选择列出的人员参加考试。",submit:function(v, h, f){
 										var pre_ids = h.find("iframe")[0].contentWindow.pre_ids;
 										var ids = h.find("iframe")[0].contentWindow.ids;
 										var pre_names = h.find("iframe")[0].contentWindow.pre_names;
@@ -319,7 +319,7 @@
 												pre_ids.shift();
 											}
 											if(pre_ids.sort().toString() == ids.sort().toString()){
-												top.jQuery.jBox.tip("未给角色【${role.name}】分配新成员！", 'info');
+												top.jQuery.jBox.tip("添加失败！", 'info');
 												return false;
 											};
 									    	var idsArr = "";

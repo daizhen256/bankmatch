@@ -3,6 +3,9 @@
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +77,21 @@ public class LoginController extends BaseController{
 //		view += "jar:file:/D:/GitHub/jeesite/src/main/webapp/WEB-INF/lib/jeesite.jar!";
 //		view += "/"+getClass().getName().replaceAll("\\.", "/").replace(getClass().getSimpleName(), "")+"view/sysLogin";
 //		view += ".jsp";
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String message;
+		long difference = 0;
+        try {
+            Date dt1 = df.parse("2018-07-01");
+            Date dt2 = new Date();
+            if (dt1.getTime() <= dt2.getTime()) {
+            	model.addAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM, "试用到期，请更换正式版本");
+                return "modules/sys/expire";
+            }
+            difference =  (dt1.getTime()-dt2.getTime())/86400000;  
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        model.addAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM, "距离试用结束还有"+difference+"天");
 		return "modules/sys/sysLogin";
 	}
 

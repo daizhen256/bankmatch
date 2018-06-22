@@ -73,13 +73,10 @@
 								<sys:validateCode name="validateCode" inputCssStyle="margin-bottom:0;" imageDivCssStyle="margin-left: 210px;margin-top: -35px;" imageCssStyle="position:absolute;z-index:999999;margin-top:5px;" buttonCssStyle="display:none"/>
 							</div>
 						 </c:if>
-		                <div id="btn" class="loginButton">
-		                	<input type="submit" style="button" value="登录"/> 
-		                </div>
 	                </form>
 	            </div>
 	        </div>
-	        <div id="ft">Copyright &copy; 2017-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}${fns:getFrontPath()}">${fns:getConfig('productName')}</a> - Powered By <a href="javascript:void(0);" onClick="alert('官网建设中……')" target="_blank">广智科技</a> ${fns:getConfig('version')}</div>
+	        <div id="ft">Copyright &copy; 2017-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}${fns:getFrontPath()}">${fns:getConfig('productName')}</a> - Powered By <a href="http://jeesite.com" target="_blank">JeeSite</a> ${fns:getConfig('version')}</div>
 	    </div>
 	   
 	</div>

@@ -219,7 +219,8 @@ public class BkmMatchController extends BaseController {
 	@RequestMapping(value = "matchok")
 	public String matchok(BkmMatch bkmMatch, Model model) {
 		bkmMatchService.matchok(bkmMatch);
-		return "redirect:" + adminPath;
+		UserUtils.getSubject().logout();
+		return "redirect:" + adminPath + "/login";
 	}
 
 }
