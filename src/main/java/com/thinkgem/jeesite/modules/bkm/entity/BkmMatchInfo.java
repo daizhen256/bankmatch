@@ -21,6 +21,8 @@ public class BkmMatchInfo extends DataEntity<BkmMatchInfo> {
 	private String matchRightRate;		// 正确率
 	private String matchHse;		// 考试题目
 	private String matchAnswer;		// 创建者
+	private int matchStep;      // 考试进度
+	private int wrongNum;      // 错题数量
 	private String preStat;      //准备状态
 	
 	public BkmMatchInfo() {
@@ -81,5 +83,22 @@ public class BkmMatchInfo extends DataEntity<BkmMatchInfo> {
 	public void setPreStat(String preStat) {
 		this.preStat = preStat;
 	}
+
+	public int getMatchStep() {
+		return matchStep;
+	}
+
+	public void setMatchStep(int matchStep) {
+		this.matchStep = matchStep;
+	}
+
+	public int getWrongNum() {
+		return wrongNum;
+	}
+
+	public void setWrongNum(int wrongNum) {
+		this.wrongNum = wrongNum;
+	}
+	
 	
 }

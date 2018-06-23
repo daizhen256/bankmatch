@@ -20,4 +20,8 @@ public interface BkmMatchInfoDao extends CrudDao<BkmMatchInfo> {
 	public int updateState(BkmMatchInfo entity);
 	
 	public String findInfoByUser(String userid);
+	
+	public int stepOK(String id,int matchStep);
+	
+	public int stepWrong(String id,int matchStep,int wrongNum);
 }

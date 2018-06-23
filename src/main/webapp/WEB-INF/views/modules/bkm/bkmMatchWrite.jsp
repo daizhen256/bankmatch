@@ -31,6 +31,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		var preStat = '${bkmMatch.bkmMatchInfoList[0].preStat}';
 		matchStat = '${bkmMatch.matchStat}';
 		hsr = '${bkmMatch.bkmMatchInfoList[0].matchHse}';
+		subindex = parseInt(document.getElementById("bkmMatchInfoList0.matchStep").value);
 		if (preStat == '未准备') {
 			jQuery(".exp").hide();
 			jQuery("#submitForm").hide();
@@ -69,6 +70,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		}
 	}
 	function nexthsr() {
+		saveStep();
 		jQuery("#example").val(hsr[subindex].question);
 		answer = answer + jQuery("#example2").val() + ',';
 		subindex++;
@@ -80,6 +82,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		}
 	}
 	function nextrandomhsr() {
+		saveStep();
 		var hsrNum = jQuery("#hsrNum").val();
 		var randomquestion = randomNum(5);
 		jQuery("#example").val(randomquestion);
@@ -129,6 +132,43 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		}
 		return i
 	}
+	function saveStep() {
+		var step = jQuery("#step").val();
+		var wrong = jQuery("#wrongnum").val();
+		if(step==undefined||step=="") {
+			step = document.getElementById("bkmMatchInfoList0.matchStep").value;
+			jQuery("#step").val(step);
+			wrong = document.getElementById("bkmMatchInfoList0.wrongNum").value;
+			jQuery("#wrongnum").val(wrong);
+			return;
+		}
+		step=parseInt(step)+1;
+		jQuery("#step").val(step);
+		var upval = jQuery("#example").val();
+		if(upval == '') {
+			return false;
+		}
+		var downval = jQuery("#example2").val();
+		var id = document.getElementById("bkmMatchInfoList0.id").value;
+		var type = 0;
+		if(upval!=downval) {
+			type = 1;
+			wrong = parseInt(wrong)+1;
+			jQuery("#wrongnum").val(wrong);
+		}
+		
+		jQuery.ajax({
+	        url:'${ctx}/bkm/bkmMatch/updatestep?infoid='+id+'&type='+type+'&step='+step+'&wrong='+wrong,
+	        type:'get',
+	        dataType:'json',
+	        timeout:5000,
+	        success:function(data, textStatus){
+	            if(data && data.result){
+	                
+	            } 
+	        }
+	    });
+	}
 </script>
 </head>
 <body>
@@ -139,8 +179,16 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
     <label class="exp__label" for="example">一次录入数据</label>
   </div>
   <div class="exp">
-    <input type="email" class="exp__input" id="example2" name="test">
+    <input type="text" class="exp__input" id="example2" name="test">
     <label class="exp__label" for="example2">二次录入数据</label>
+  </div>
+  <div class="exp">
+    <input class="exp__input" id="step" name="test">
+    <label class="exp__label" for="step">做题数</label>
+  </div>
+  <div class="exp">
+    <input class="exp__input" id="wrongnum" name="test">
+    <label class="exp__label" for="wrongnum">错题数</label>
   </div>
   	<form:form id="inputForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/prepareok" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -158,6 +206,9 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		<form:hidden path="hsrType"/>
 		<form:hidden path="bkmMatchInfoList[0].matchHse"/>
 		<form:hidden path="bkmMatchInfoList[0].matchAnswer"/>
+		<form:hidden path="bkmMatchInfoList[0].id"/>
+		<form:hidden path="bkmMatchInfoList[0].matchStep"/>
+		<form:hidden path="bkmMatchInfoList[0].wrongNum"/>
 		<input type="hidden" id="matchStartDate" value="<fmt:formatDate value="${bkmMatch.matchStartDate}" pattern="yyyy-MM-dd HH:mm:ss"/>">
 		<div class="form-actions">
 			<div style="text-align: center;">

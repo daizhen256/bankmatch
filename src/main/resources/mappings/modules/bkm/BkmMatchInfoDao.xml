@@ -16,6 +16,8 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.pre_stat AS "preStat",
+		a.match_step AS "matchStep",
+		a.wrong_num AS "wrongNum",
 		u2.name AS "matchUser.name"
 	</sql>
 	
@@ -88,7 +90,9 @@
 			update_date,
 			remarks,
 			del_flag,
-			pre_stat
+			pre_stat,
+			match_step,
+			wrong_num
 		) VALUES (
 			#{id},
 			#{matchId},
@@ -102,7 +106,9 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{preStat}
+			#{preStat},
+			#{matchStep},
+			#{wrongNum}
 		)
 	</insert>
 	
@@ -155,4 +161,6 @@
 		ORDER BY bm.create_date ASC
 	</select>
 	
+	<update id="stepOK">update bkm_match_info set match_step = #{1} where id = #{0}</update>
+	<update id="stepWrong">update bkm_match_info set match_step = #{1},wrong_num = #{2} where id = #{0}</update>
 </mapper>

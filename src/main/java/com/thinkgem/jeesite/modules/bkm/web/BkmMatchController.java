@@ -216,11 +216,22 @@ public class BkmMatchController extends BaseController {
 		return "modules/bkm/bkmMatchWrite";
 	}
 	
+	//考试交卷
 	@RequestMapping(value = "matchok")
 	public String matchok(BkmMatch bkmMatch, Model model) {
 		bkmMatchService.matchok(bkmMatch);
 		UserUtils.getSubject().logout();
 		return "redirect:" + adminPath + "/login";
 	}
+	
+	@ResponseBody
+    @RequestMapping(value = "updatestep", method=RequestMethod.GET)
+	public JsonPackage updatestep(String infoid,String type,int step,int wrong) {
+		JsonPackage json = new JsonPackage();
+		bkmMatchService.updateStep(infoid,type,step,wrong);
+		return json;
+	}
+	
+	
 
 }
