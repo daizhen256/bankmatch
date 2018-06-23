@@ -23,37 +23,36 @@
 </head>
 <body>
 	<div class="page-content">
-	<form:form id="searchForm" modelAttribute="bkmMatchInfo" action="${ctx}/bkm/bkmMatchInfo/" method="post" class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-			<label>考试者：</label>
-				<form:input path="matchUser" htmlEscape="false" maxlength="64" class="input-medium"/>
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
-			<shiro:hasPermission name="bkm:bkmMatchInfo:edit"><a class="btn btn-s-md btn-primary" href="${ctx}/bkm/bkmMatchInfo/form">历史记录添加</a></shiro:hasPermission>
-	</form:form>
 	<sys:message content="${message}"/>
 	<div class="table">
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>考试编号</th>
-				<th>考试者</th>
+				<th>考试名称</th>
+				<th>考试考试时间</th>
+				<th>总题数</th>
+				<th>正确率(%)</th>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${page.list}" var="bkmMatchInfo">
+		<c:forEach items="${list}" var="bkmMatchInfo">
 			<tr>
 				<td><a href="${ctx}/bkm/bkmMatchInfo/form?id=${bkmMatchInfo.id}">
-					${bkmMatchInfo.matchId}
+					${bkmMatchInfo.matchName}
 				</a></td>
 				<td>
-					${bkmMatchInfo.matchUser}
+					${bkmMatchInfo.matchUser.name}
+				</td>
+				<td>
+					${bkmMatchInfo.matchStep}
+				</td>
+				<td>
+					${bkmMatchInfo.matchRightRate}
 				</td>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	<div class="pagination">${page}</div>
 	</div></div>
 </body>
 </html>

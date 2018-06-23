@@ -18,7 +18,8 @@
 		a.pre_stat AS "preStat",
 		a.match_step AS "matchStep",
 		a.wrong_num AS "wrongNum",
-		u2.name AS "matchUser.name"
+		u2.name AS "matchUser.name",
+		b.match_name AS "matchName"
 	</sql>
 	
 	<sql id="bkmMatchInfoJoins">

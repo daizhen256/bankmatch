@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.bkm.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,8 +21,11 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchInfoDao;
+import com.thinkgem.jeesite.modules.bkm.entity.BkmMatch;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.bkm.service.BkmMatchInfoService;
+import com.thinkgem.jeesite.modules.bkm.service.BkmMatchService;
 
 /**
  * 考试历史管理Controller
@@ -33,6 +38,9 @@ public class BkmMatchInfoController extends BaseController {
 
 	@Autowired
 	private BkmMatchInfoService bkmMatchInfoService;
+	
+	@Autowired
+	private BkmMatchService bkmMatchService;
 	
 	@ModelAttribute
 	public BkmMatchInfo get(@RequestParam(required=false) String id) {
@@ -49,35 +57,28 @@ public class BkmMatchInfoController extends BaseController {
 	@RequiresPermissions("bkm:bkmMatchInfo:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(BkmMatchInfo bkmMatchInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<BkmMatchInfo> page = bkmMatchInfoService.findPage(new Page<BkmMatchInfo>(request, response), bkmMatchInfo); 
-		model.addAttribute("page", page);
+		List<BkmMatchInfo> page = bkmMatchInfoService.findList(bkmMatchInfo); 
+		model.addAttribute("list", page);
 		return "modules/bkm/bkmMatchInfoList";
 	}
 
 	@RequiresPermissions("bkm:bkmMatchInfo:view")
 	@RequestMapping(value = "form")
 	public String form(BkmMatchInfo bkmMatchInfo, Model model) {
-		model.addAttribute("bkmMatchInfo", bkmMatchInfo);
-		return "modules/bkm/bkmMatchInfoForm";
-	}
-
-	@RequiresPermissions("bkm:bkmMatchInfo:edit")
-	@RequestMapping(value = "save")
-	public String save(BkmMatchInfo bkmMatchInfo, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, bkmMatchInfo)){
-			return form(bkmMatchInfo, model);
+		BkmMatch bkmMatch = bkmMatchService.get(bkmMatchInfo.getMatchId());
+		Double setp = (double) bkmMatchInfo.getMatchStep();
+		Double wrong = (double) bkmMatchInfo.getWrongNum();
+		if(setp==0) {
+			bkmMatchInfo.setMatchRightRate("0");
+		} else {
+			bkmMatchInfo.setMatchRightRate(String.valueOf((setp-wrong)/setp*100));
 		}
-		bkmMatchInfoService.save(bkmMatchInfo);
-		addMessage(redirectAttributes, "保存历史记录成功");
-		return "redirect:"+Global.getAdminPath()+"/bkm/bkmMatchInfo/?repage";
-	}
-	
-	@RequiresPermissions("bkm:bkmMatchInfo:edit")
-	@RequestMapping(value = "delete")
-	public String delete(BkmMatchInfo bkmMatchInfo, RedirectAttributes redirectAttributes) {
-		bkmMatchInfoService.delete(bkmMatchInfo);
-		addMessage(redirectAttributes, "删除历史记录成功");
-		return "redirect:"+Global.getAdminPath()+"/bkm/bkmMatchInfo/?repage";
+		model.addAttribute("bkmMatchInfo", bkmMatchInfo);
+		String question = bkmMatchInfo.getMatchHse();
+		String answer = bkmMatchInfo.getMatchAnswer();
+		model.addAttribute("qalist", bkmMatchInfoService.generalAnswerList(question, answer));
+		model.addAttribute("bkmMatch", bkmMatch);
+		return "modules/bkm/bkmMatchInfoForm";
 	}
 
 }

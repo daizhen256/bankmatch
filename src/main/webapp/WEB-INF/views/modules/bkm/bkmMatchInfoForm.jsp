@@ -34,12 +34,31 @@
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<div class="col-md-2">
+			<label class="control-label">考试名称：</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				${bkmMatch.matchName}
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+			<label class="control-label">考试时间：</label>
+			</div>
+			<div class="col-md-10">
+			<div class="form-group">
+				<fmt:formatDate value="${bkmMatch.matchDate}" type="both" dateStyle="full"/>
+			</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
 			<label class="control-label">考试者：</label>
 			</div>
 			<div class="col-md-10">
 			<div class="form-group">
-				<form:input path="matchUser" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
+				${fns:getUserById(bkmMatchInfo.matchUser).name}
 			</div>
 			</div>
 		</div>
@@ -49,32 +68,37 @@
 			</div>
 			<div class="col-md-10">
 			<div class="form-group">
-				<form:input path="matchRightRate" htmlEscape="false" class="input-xlarge "/>
+				<form:input path="matchRightRate" htmlEscape="false" class="input-xlarge "/>%
 			</div>
 			</div>
 		</div>
 		<div class="control-group">
-			<div class="col-md-2">
-			<label class="control-label">考试题目：</label>
-			</div>
-			<div class="col-md-10">
-			<div class="form-group">
-				<form:input path="matchHse" htmlEscape="false" maxlength="3000" class="input-xlarge "/>
-			</div>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="col-md-2">
-			<label class="control-label">创建者：</label>
-			</div>
-			<div class="col-md-10">
-			<div class="form-group">
-				<form:input path="matchAnswer" htmlEscape="false" maxlength="3000" class="input-xlarge "/>
-			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+						<table id="" class="table table-striped table-bordered table-condensed">
+							<thead>
+								<tr>
+									<th>考试题目</th>
+									<th>你的答案</th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:forEach items="${qalist}" var="chengjidan">
+								<tr>
+									<td>
+										${chengjidan.question}
+									</td>
+									<td>
+										${chengjidan.answer}
+									</td>
+								</tr>
+							</c:forEach>
+							</tbody>
+						</table>
+				</div>
 			</div>
 		</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="bkm:bkmMatchInfo:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn btn-info" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
