@@ -45,7 +45,7 @@
 				AND a.match_id = #{matchId}
 			</if>
 			<if test="matchUser != null and matchUser != ''">
-				AND a.match_user = #{matchUser}
+				AND a.match_user = #{matchUser.id}
 			</if>
 		</where>
 		<choose>
