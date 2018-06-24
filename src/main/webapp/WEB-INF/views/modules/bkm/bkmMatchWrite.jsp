@@ -14,7 +14,6 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	var subindex = 0;
 	var hsr;
 	var matchStat;
-	var answer;
 	var question;
 	window.onload = function() {
 		$(document).keydown(function(event) {
@@ -72,13 +71,11 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	function nexthsr() {
 		saveStep();
 		jQuery("#example").val(hsr[subindex].question);
-		answer = answer + jQuery("#example2").val() + ',';
 		subindex++;
 		jQuery("#example2").val('');
 		jQuery("#example2").focus();
 		if (subindex == hsr.length) {
 			jQuery("#btnNext").hide();
-			document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer
 		}
 	}
 	function nextrandomhsr() {
@@ -87,13 +84,11 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		var randomquestion = randomNum(5);
 		jQuery("#example").val(randomquestion);
 		question = question + randomquestion + ',';
-		answer = answer + jQuery("#example2").val() + ',';
 		subindex++;
 		jQuery("#example2").val('');
 		jQuery("#example2").focus();
 		if (hsrNum != '' && subindex == hsrNum) {
 			jQuery("#btnNext").hide();
-			document.getElementById("bkmMatchInfoList0.matchAnswer").value = answer
 		}
 	}
 	function randomNum(weisu) {
@@ -135,6 +130,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	function saveStep() {
 		var step = jQuery("#step").val();
 		var wrong = jQuery("#wrongnum").val();
+		var answers = document.getElementById("bkmMatchInfoList0.matchAnswer").value;
 		if(step==undefined||step=="") {
 			step = document.getElementById("bkmMatchInfoList0.matchStep").value;
 			jQuery("#step").val(step);
@@ -142,13 +138,22 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			jQuery("#wrongnum").val(wrong);
 			return;
 		}
+		var downval = jQuery("#example2").val();
 		step=parseInt(step)+1;
 		jQuery("#step").val(step);
+		if(answers=="") {
+			answers=[{answer:downval}];
+		}else{
+			var ansjson = JSON.parse(answers);
+			ansjson.push({answer:downval});
+			answers = ansjson;
+		}
+		document.getElementById("bkmMatchInfoList0.matchAnswer").value = JSON.stringify(answers);
 		var upval = jQuery("#example").val();
 		if(upval == '') {
 			return false;
 		}
-		var downval = jQuery("#example2").val();
+		
 		var id = document.getElementById("bkmMatchInfoList0.id").value;
 		var type = 0;
 		if(upval!=downval) {
@@ -158,9 +163,10 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		}
 		
 		jQuery.ajax({
-	        url:'${ctx}/bkm/bkmMatch/updatestep?infoid='+id+'&type='+type+'&step='+step+'&wrong='+wrong,
-	        type:'get',
+	        url:'${ctx}/bkm/bkmMatch/updatestep',
+	        type:'post',
 	        dataType:'json',
+	        data: {"infoid": id, "type": type, "step": step, "wrong": wrong, "answers": JSON.stringify(answers)},
 	        timeout:5000,
 	        success:function(data, textStatus){
 	            if(data && data.result){

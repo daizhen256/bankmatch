@@ -172,11 +172,11 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 	}
 	
 	@Transactional(readOnly = false)
-	public void updateStep(String infoid,String type,int step,int wrong) {
+	public void updateStep(String infoid,String type,int step,int wrong,String answers) {
 		if("0".equals(type)) {
-			bkmMatchInfoDao.stepOK(infoid,step);
+			bkmMatchInfoDao.stepOK(infoid,step,answers);
 		}else {
-			bkmMatchInfoDao.stepWrong(infoid,step,wrong);
+			bkmMatchInfoDao.stepWrong(infoid,step,answers,wrong);
 		}
 	}
 	

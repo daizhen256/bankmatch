@@ -225,10 +225,11 @@ public class BkmMatchController extends BaseController {
 	}
 	
 	@ResponseBody
-    @RequestMapping(value = "updatestep", method=RequestMethod.GET)
-	public JsonPackage updatestep(String infoid,String type,int step,int wrong) {
+    @RequestMapping(value = "updatestep", method=RequestMethod.POST)
+	public JsonPackage updatestep(String infoid,String type,int step,int wrong,String answers) {
 		JsonPackage json = new JsonPackage();
-		bkmMatchService.updateStep(infoid,type,step,wrong);
+		String jsonAnswers = answers.replaceAll("&quot;", "\"");
+		bkmMatchService.updateStep(infoid,type,step,wrong,jsonAnswers);
 		return json;
 	}
 	
