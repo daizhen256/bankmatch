@@ -74,7 +74,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		subindex++;
 		jQuery("#example2").val('');
 		jQuery("#example2").focus();
-		if (subindex == hsr.length) {
+		if (subindex == hsr.length+1) {
 			jQuery("#btnNext").hide();
 		}
 	}
@@ -205,7 +205,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			</div>
 		</div>
 	</form:form>
-	  	<form:form id="submitForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/matchok" method="post" class="form-horizontal">
+	<form:form id="submitForm" modelAttribute="bkmMatch" action="${ctx}/bkm/bkmMatch/matchok" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="matchTime"/>
 		<form:hidden path="hsrNum"/>
