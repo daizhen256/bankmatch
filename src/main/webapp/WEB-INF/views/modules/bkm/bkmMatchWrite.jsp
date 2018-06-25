@@ -32,17 +32,22 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		hsr = '${bkmMatch.bkmMatchInfoList[0].matchHse}';
 		subindex = parseInt(document.getElementById("bkmMatchInfoList0.matchStep").value);
 		if (preStat == '未准备') {
+			// 如果没有准备 则隐藏考试按钮 显示准备按钮
 			jQuery(".exp").hide();
 			jQuery("#submitForm").hide();
 			jQuery("#inputForm").show()
 		} else {
+			// 判断考试状态
 			if (matchStat == 1) {
+				// 已经开始考试，显示剩余时间并开始倒计时
 				jQuery("#shengyutime").show();
 				leftTimer();
+				// 如果是全员随机题的话 显示考题信息 显示考试按钮 隐藏准备按钮
 				if (jQuery("#hsrType").val() == 0) {
 					jQuery(".exp").show();
 					jQuery("#submitForm").show();
 					jQuery("#inputForm").hide();
+					// 把考题信息转化成JSON格式开始循环
 					hsr = JSON.parse(hsr);
 					nexthsr()
 				} else if (jQuery("#hsrType").val() == 1) {
@@ -59,6 +64,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			}
 		}
 	});
+	// 点击下一题
 	function next() {
 		if (jQuery("#hsrType").val() == 0) {
 			nexthsr();
@@ -68,12 +74,19 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			
 		}
 	}
+	// 下一个全员随机题
 	function nexthsr() {
+		// 保存考试记录
 		saveStep();
+		// 获取下一道题目内容到录入一
 		jQuery("#example").val(hsr[subindex].question);
+		// 题目索引+1
 		subindex++;
+		// 清空录入二
 		jQuery("#example2").val('');
+		// 对录入二加焦点
 		jQuery("#example2").focus();
+		// 判断是否是最后一道题,如果是则隐藏下一题按钮
 		if (subindex == hsr.length+1) {
 			jQuery("#btnNext").hide();
 		}
