@@ -66,6 +66,9 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 	
 	public List generalAnswerList(String question, String answer) {
 		List<QuestionAndAnswer> list = new ArrayList<QuestionAndAnswer>();
+		if(question.indexOf("&quot;")!=-1) {
+			question = question.replaceAll("&quot;", "\"");
+		}
 		JSONArray qarray = JSON.parseArray(question);
 		JSONArray aarray = JSON.parseArray(answer);
 		for(int i=0;i<qarray.size();i++) {

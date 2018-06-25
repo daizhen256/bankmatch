@@ -78,6 +78,12 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	function nexthsr() {
 		// 保存考试记录
 		saveStep();
+		// 判断是否是最后一道题,如果是则隐藏下一题按钮
+		if (subindex == hsr.length) {
+			jQuery("#example2").val('您已答完所有问题，请点击交卷');
+			jQuery("#btnNext").hide();
+			return;
+		}
 		// 获取下一道题目内容到录入一
 		jQuery("#example").val(hsr[subindex].question);
 		// 题目索引+1
@@ -86,10 +92,6 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		jQuery("#example2").val('');
 		// 对录入二加焦点
 		jQuery("#example2").focus();
-		// 判断是否是最后一道题,如果是则隐藏下一题按钮
-		if (subindex == hsr.length+1) {
-			jQuery("#btnNext").hide();
-		}
 	}
 	function nextrandomhsr() {
 		saveStep();
