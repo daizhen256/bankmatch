@@ -164,4 +164,6 @@
 	
 	<update id="stepOK">update bkm_match_info set match_step = #{1},match_answer = #{2} where id = #{0}</update>
 	<update id="stepWrong">update bkm_match_info set match_step = #{1},match_answer = #{2},wrong_num = #{3} where id = #{0}</update>
+	<update id="stepRandOK">update bkm_match_info set match_step = #{1},match_answer = #{2},match_hse = #{3} where id = #{0}</update>
+	<update id="stepRandWrong">update bkm_match_info set match_step = #{1},match_answer = #{2},wrong_num = #{3},match_hse = #{4} where id = #{0}</update>
 </mapper>

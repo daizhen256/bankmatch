@@ -96,15 +96,18 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	function nextrandomhsr() {
 		saveStep();
 		var hsrNum = jQuery("#hsrNum").val();
+		if (hsrNum != '' && subindex == hsrNum) {
+			jQuery("#example2").val('您已答完所有问题，请点击交卷');
+			jQuery("#btnNext").hide();
+			return;
+		}
 		var randomquestion = randomNum(5);
 		jQuery("#example").val(randomquestion);
 		question = question + randomquestion + ',';
 		subindex++;
 		jQuery("#example2").val('');
 		jQuery("#example2").focus();
-		if (hsrNum != '' && subindex == hsrNum) {
-			jQuery("#btnNext").hide();
-		}
+		
 	}
 	function randomNum(weisu) {
 		var minNum = Math.pow(10, weisu - 1);
@@ -146,6 +149,8 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		var step = jQuery("#step").val();
 		var wrong = jQuery("#wrongnum").val();
 		var answers = document.getElementById("bkmMatchInfoList0.matchAnswer").value;
+		var questions = document.getElementById("bkmMatchInfoList0.matchHse").value;
+		var hsrType = jQuery("#hsrType").val();
 		if(step==undefined||step=="") {
 			step = document.getElementById("bkmMatchInfoList0.matchStep").value;
 			jQuery("#step").val(step);
@@ -163,12 +168,20 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			ansjson.push({answer:downval});
 			answers = ansjson;
 		}
+		
 		document.getElementById("bkmMatchInfoList0.matchAnswer").value = JSON.stringify(answers);
 		var upval = jQuery("#example").val();
 		if(upval == '') {
 			return false;
 		}
-		
+		if(questions==undefined||questions=="") {
+			questions=[{question:upval}];
+		}else{
+			var hsrjson = JSON.parse(questions);
+			hsrjson.push({question:upval});
+			questions = hsrjson;
+		}
+		document.getElementById("bkmMatchInfoList0.matchHse").value = JSON.stringify(questions);
 		var id = document.getElementById("bkmMatchInfoList0.id").value;
 		var type = 0;
 		if(upval!=downval) {
@@ -181,7 +194,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	        url:'${ctx}/bkm/bkmMatch/updatestep',
 	        type:'post',
 	        dataType:'json',
-	        data: {"infoid": id, "type": type, "step": step, "wrong": wrong, "answers": JSON.stringify(answers)},
+	        data: {"infoid": id, "hsrType": hsrType, "type": type, "step": step, "wrong": wrong, "answers": JSON.stringify(answers), "questions": JSON.stringify(questions)},
 	        timeout:5000,
 	        success:function(data, textStatus){
 	            if(data && data.result){
