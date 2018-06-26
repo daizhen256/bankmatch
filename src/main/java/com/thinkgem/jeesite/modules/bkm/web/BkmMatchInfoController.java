@@ -15,13 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchInfoDao;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatch;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.bkm.service.BkmMatchInfoService;
@@ -54,6 +50,14 @@ public class BkmMatchInfoController extends BaseController {
 		return entity;
 	}
 	
+	/**
+	 * 查看成绩单列表
+	 * @param bkmMatchInfo
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("bkm:bkmMatchInfo:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(BkmMatchInfo bkmMatchInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -62,6 +66,12 @@ public class BkmMatchInfoController extends BaseController {
 		return "modules/bkm/bkmMatchInfoList";
 	}
 
+	/**
+	 * 查看成绩单详细
+	 * @param bkmMatchInfo
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("bkm:bkmMatchInfo:view")
 	@RequestMapping(value = "form")
 	public String form(BkmMatchInfo bkmMatchInfo, Model model) {

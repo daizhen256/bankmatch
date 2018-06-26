@@ -116,10 +116,10 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	}
 	function leftTimer(year, month, day, hour, minute, second) {
 		var leftTime = (new Date(year, month - 1, day, hour, minute, second)) - (new Date());
-		var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10);
-		var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10);
-		var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);
-		var seconds = parseInt(leftTime / 1000 % 60, 10);
+		var days = parseInt(leftTime/1000/60/60/24, 10);
+		var hours = parseInt(leftTime/1000/60/60%24, 10);
+		var minutes = parseInt(leftTime/1000/60%60, 10);
+		var seconds = parseInt(leftTime/1000%60, 10);
 		days = checkTime(days);
 		hours = checkTime(hours);
 		minutes = checkTime(minutes);

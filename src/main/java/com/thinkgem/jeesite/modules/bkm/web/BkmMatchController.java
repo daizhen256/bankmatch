@@ -34,7 +34,6 @@ import com.thinkgem.jeesite.modules.bkm.service.BkmMatchService;
 import com.thinkgem.jeesite.modules.sys.entity.JsonPackage;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.service.OfficeService;
-import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
@@ -48,9 +47,6 @@ public class BkmMatchController extends BaseController {
 
 	@Autowired
 	private BkmMatchService bkmMatchService;
-	
-	@Autowired
-	private SystemService systemService;
 	
 	@Autowired
 	private OfficeService officeService;
@@ -120,7 +116,13 @@ public class BkmMatchController extends BaseController {
 		addMessage(redirectAttributes, "保存考试信息成功");
 		return "redirect:"+Global.getAdminPath()+"/bkm/bkmMatch/form?id="+bkmMatch.getId();
 	}
-	
+	/**
+	 * 开始考试
+	 * @param bkmMatch
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "startmatch")
 	public JsonPackage startmatch(BkmMatch bkmMatch, Model model, RedirectAttributes redirectAttributes) {
@@ -134,6 +136,13 @@ public class BkmMatchController extends BaseController {
 		return json;
 	}
 	
+	/**
+	 * 考试结束
+	 * @param bkmMatch
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "stopmatch")
 	public JsonPackage stopmatch(BkmMatch bkmMatch, Model model, RedirectAttributes redirectAttributes) {
@@ -147,6 +156,12 @@ public class BkmMatchController extends BaseController {
 		return json;
 	}
 	
+	/**
+	 * 删除考试
+	 * @param bkmMatch
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("bkm:bkmMatch:edit")
 	@RequestMapping(value = "delete")
 	public String delete(BkmMatch bkmMatch, RedirectAttributes redirectAttributes) {
@@ -155,6 +170,11 @@ public class BkmMatchController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/bkm/bkmMatch/?repage";
 	}
 	
+	/**
+	 * 获取考试准备信息
+	 * @param id
+	 * @return
+	 */
 	@ResponseBody
     @RequestMapping(value = "getmatchpre", method=RequestMethod.GET)
 	public JsonPackage getUserContact(String id) {
@@ -168,6 +188,11 @@ public class BkmMatchController extends BaseController {
 		return json;
 	}
 	
+	/**
+	 * 首页检查是否有考试
+	 * @param userid
+	 * @return
+	 */
 	@ResponseBody
     @RequestMapping(value = "getMatchOrder", method=RequestMethod.GET)
 	public JsonPackage getMatchOrder(String userid) {
@@ -177,13 +202,19 @@ public class BkmMatchController extends BaseController {
 		return json;
 	}
 	
+	/**
+	 * 开始考试
+	 * @param bkmMatch
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "matchinit")
 	public String matchinit(BkmMatch bkmMatch, Model model) {
 		User currentUser = UserUtils.getUser();
-		List bkmMatchInfoList = new ArrayList<BkmMatchInfo>();
-		for(int i=0; i<bkmMatch.getBkmMatchInfoList().size();i++) {
-			if(currentUser.getId().equals(bkmMatch.getBkmMatchInfoList().get(i).getMatchUser().getId())) {
-				bkmMatchInfoList.add(bkmMatch.getBkmMatchInfoList().get(i));
+		List<BkmMatchInfo> bkmMatchInfoList = new ArrayList<BkmMatchInfo>();
+		for(BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()) {
+			if(currentUser.getId().equals(bkmMatchInfo.getMatchUser().getId())) {
+				bkmMatchInfoList.add(bkmMatchInfo);
 				break;
 			}
 		}
@@ -196,14 +227,20 @@ public class BkmMatchController extends BaseController {
 		return "modules/bkm/bkmMatchWrite";
 	}
 	
+	/**
+	 * 准备就绪开始考试
+	 * @param bkmMatch
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "prepareok")
 	public String prepareok(BkmMatch bkmMatch, Model model) {
 		bkmMatchService.prepareok(bkmMatch);
 		User currentUser = UserUtils.getUser();
-		List bkmMatchInfoList = new ArrayList<BkmMatchInfo>();
-		for(int i=0; i<bkmMatch.getBkmMatchInfoList().size();i++) {
-			if(currentUser.getId().equals(bkmMatch.getBkmMatchInfoList().get(i).getMatchUser().getId())) {
-				bkmMatchInfoList.add(bkmMatch.getBkmMatchInfoList().get(i));
+		List<BkmMatchInfo> bkmMatchInfoList = new ArrayList<BkmMatchInfo>();
+		for(BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()) {
+			if(currentUser.getId().equals(bkmMatchInfo.getMatchUser().getId())) {
+				bkmMatchInfoList.add(bkmMatchInfo);
 				break;
 			}
 		}
@@ -216,7 +253,12 @@ public class BkmMatchController extends BaseController {
 		return "modules/bkm/bkmMatchWrite";
 	}
 	
-	//考试交卷
+	/**
+	 * 考试交卷
+	 * @param bkmMatch
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "matchok")
 	public String matchok(BkmMatch bkmMatch, Model model) {
 		bkmMatchService.matchok(bkmMatch);
@@ -224,13 +266,24 @@ public class BkmMatchController extends BaseController {
 		return "redirect:" + adminPath + "/login";
 	}
 	
+	/**
+	 * 保存考试进度
+	 * @param infoid
+	 * @param type
+	 * @param step
+	 * @param wrong
+	 * @param answers
+	 * @param hsrType
+	 * @param questions
+	 * @return
+	 */
 	@ResponseBody
     @RequestMapping(value = "updatestep", method=RequestMethod.POST)
 	public JsonPackage updatestep(String infoid,String type,int step,int wrong,String answers,String hsrType,String questions) {
 		JsonPackage json = new JsonPackage();
 		String jsonAnswers = answers.replaceAll("&quot;", "\"");
 		String jsonQuestions = questions.replaceAll("&quot;", "\"");
-		bkmMatchService.updateStep(infoid,type,step,wrong,jsonAnswers,hsrType,questions);
+		bkmMatchService.updateStep(infoid,type,step,wrong,jsonAnswers,hsrType,jsonQuestions);
 		return json;
 	}
 	
