@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.bkm.dao;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmHsrLib;
@@ -14,5 +16,7 @@ import com.thinkgem.jeesite.modules.bkm.entity.BkmHsrLib;
  */
 @MyBatisDao
 public interface BkmHsrLibDao extends CrudDao<BkmHsrLib> {
+	
+	public List<BkmHsrLib> findRandomList(int randomSuu);
 	
 }

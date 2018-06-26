@@ -17,7 +17,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.bkm.entity.BkmHsrLib;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatch;
+import com.thinkgem.jeesite.modules.bkm.dao.BkmHsrLibDao;
 import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchDao;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -35,6 +37,9 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 
 	@Autowired
 	private BkmMatchInfoDao bkmMatchInfoDao;
+	
+	@Autowired
+	private BkmHsrLibDao bkmHsrLibDao;
 	
 	public BkmMatch get(String id) {
 		BkmMatch bkmMatch = super.get(id);
@@ -100,7 +105,14 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 		bkmMatch.setMatchStat("1");
 		super.save(bkmMatch);
 		if(bkmMatch.getHsrType()==0) {
-		JSONArray matchHse = getMatchHse(bkmMatch.getHsrNum()); 
+			JSONArray matchHse = getMatchHse(bkmMatch.getHsrNum()); 
+			for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
+				bkmMatchInfo.setMatchHse(matchHse.toJSONString());
+				bkmMatchInfo.preUpdate();
+				bkmMatchInfoDao.updateHse(bkmMatchInfo);
+			}
+		}else if(bkmMatch.getHsrType()==2) {
+			JSONArray matchHse = getMatchHseFromLib(bkmMatch.getHsrNum()); 
 			for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
 				bkmMatchInfo.setMatchHse(matchHse.toJSONString());
 				bkmMatchInfo.preUpdate();
@@ -128,6 +140,18 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 			JSONObject question = new JSONObject();
 			 float f = rand.nextFloat() * 1000;
 			question.put("question", dcmFmt.format(f));
+			hse.add(question);
+		}
+		return hse;
+	}
+	
+	private JSONArray getMatchHseFromLib(int hsrnum) {
+		JSONArray hse = new JSONArray();
+		List<BkmHsrLib> libquestionlist = bkmHsrLibDao.findRandomList(hsrnum);
+		for(BkmHsrLib bkmHsrLib : libquestionlist) {
+			JSONObject question = new JSONObject();
+			question.put("question",bkmHsrLib.getHsrQuestion());
+			question.put("libid",bkmHsrLib.getHsrLibId());
 			hse.add(question);
 		}
 		return hse;

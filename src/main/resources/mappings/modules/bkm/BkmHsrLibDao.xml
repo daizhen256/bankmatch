@@ -109,4 +109,13 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="findRandomList" resultType="BkmHsrLib">
+		SELECT 
+			<include refid="bkmHsrLibColumns"/>
+		FROM bkm_hsr_lib a
+		<include refid="bkmHsrLibJoins"/>
+		<where>
+			 <![CDATA[ a.hsr_lib_id >=(( SELECT MAX(hsr_lib_id) FROM bkm_hsr_lib) - ( SELECT MIN(hsr_lib_id) FROM bkm_hsr_lib)) * RAND() + ( SELECT MIN(hsr_lib_id) FROM bkm_hsr_lib) ]]>   LIMIT #{randomSuu}
+		</where>
+	</select>
 </mapper>

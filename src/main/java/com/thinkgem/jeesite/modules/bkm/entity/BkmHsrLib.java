@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.supcan.annotation.treelist.cols.SupCol;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
 /**
  * 题库信息管理Entity
@@ -30,6 +32,8 @@ public class BkmHsrLib extends DataEntity<BkmHsrLib> {
 		super(id);
 	}
 
+	@SupCol(isUnique="true", isHide="true")
+	@ExcelField(title="ID", type=1, align=2, sort=1)
 	public Long getHsrLibId() {
 		return hsrLibId;
 	}
@@ -39,6 +43,7 @@ public class BkmHsrLib extends DataEntity<BkmHsrLib> {
 	}
 	
 	@Length(min=0, max=255, message="题干长度必须介于 0 和 255 之间")
+	@ExcelField(title="题目", align=2, sort=20)
 	public String getHsrQuestion() {
 		return hsrQuestion;
 	}

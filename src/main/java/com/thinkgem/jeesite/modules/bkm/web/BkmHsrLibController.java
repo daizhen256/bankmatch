@@ -24,16 +24,14 @@ import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmHsrLib;
 import com.thinkgem.jeesite.modules.bkm.service.BkmHsrLibService;
 import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.thinkgem.jeesite.modules.sys.service.SystemService;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 题库信息管理Controller
@@ -99,13 +97,13 @@ public class BkmHsrLibController extends BaseController {
 	 * @param redirectAttributes
 	 * @return
 	 */
-	@RequiresPermissions("sys:bkmHsrLib:view")
+	@RequiresPermissions("bkm:bkmHsrLib:view")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
             String fileName = "题库数据导入模板.xlsx";
-    		List<User> list = Lists.newArrayList(); list.add(UserUtils.getUser());
-    		new ExportExcel("题库数据", User.class, 2).setDataList(list).write(response, fileName).dispose();
+    		List<BkmHsrLib> list = Lists.newArrayList();;
+    		new ExportExcel("题库数据", BkmHsrLib.class, 2).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
@@ -119,47 +117,37 @@ public class BkmHsrLibController extends BaseController {
 	 * @param redirectAttributes
 	 * @return
 	 */
-	@RequiresPermissions("sys:bkmHsrLib:edit")
+	@RequiresPermissions("bkm:bkmHsrLib:edit")
     @RequestMapping(value = "import", method=RequestMethod.POST)
     public String importFile(MultipartFile file, RedirectAttributes redirectAttributes) {
-		if(Global.isDemoMode()){
-			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/sys/user/list?repage";
-		}
 		try {
 			int successNum = 0;
 			int failureNum = 0;
 			StringBuilder failureMsg = new StringBuilder();
 			ImportExcel ei = new ImportExcel(file, 1, 0);
-			List<User> list = ei.getDataList(User.class);
-			for (User user : list){
+			List<BkmHsrLib> list = ei.getDataList(BkmHsrLib.class);
+			for (BkmHsrLib bkmHsrLib : list){
 				try{
-					if ("true".equals(checkLoginName("", user.getLoginName()))){
-						user.setPassword(SystemService.entryptPassword("123456"));
-						BeanValidators.validateWithException(validator, user);
-						systemService.saveUser(user);
-						successNum++;
-					}else{
-						failureMsg.append("<br/>登录名 "+user.getLoginName()+" 已存在; ");
-						failureNum++;
-					}
+					BeanValidators.validateWithException(validator, bkmHsrLib);
+					bkmHsrLibService.save(bkmHsrLib);
+					successNum++;
 				}catch(ConstraintViolationException ex){
-					failureMsg.append("<br/>登录名 "+user.getLoginName()+" 导入失败：");
+					failureMsg.append("<br/>题目 "+bkmHsrLib.getHsrQuestion()+" 导入失败：");
 					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
 					for (String message : messageList){
 						failureMsg.append(message+"; ");
 						failureNum++;
 					}
 				}catch (Exception ex) {
-					failureMsg.append("<br/>登录名 "+user.getLoginName()+" 导入失败："+ex.getMessage());
+					failureMsg.append("<br/>题目 "+bkmHsrLib.getHsrQuestion()+" 导入失败："+ex.getMessage());
 				}
 			}
 			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条用户，导入信息如下：");
+				failureMsg.insert(0, "，失败 "+failureNum+" 条题目，导入信息如下：");
 			}
-			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条用户"+failureMsg);
+			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条题目"+failureMsg);
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入用户失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "导入题库失败！失败信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/bkm/bkmHsrLib/?repage";
     }
@@ -172,13 +160,13 @@ public class BkmHsrLibController extends BaseController {
 	 * @param redirectAttributes
 	 * @return
 	 */
-	@RequiresPermissions("sys:bkmHsrLib:view")
+	@RequiresPermissions("bkm:bkmHsrLib:view")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(BkmHsrLib bkmHsrLib, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
             String fileName = "题库数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
-            Page<BkmHsrLib> page = bkmHsrLibService.findUser(new Page<BkmHsrLib>(request, response, -1), bkmHsrLib);
-    		new ExportExcel("题库数据", User.class).setDataList(page.getList()).write(response, fileName).dispose();
+            Page<BkmHsrLib> page = bkmHsrLibService.findPage(new Page<BkmHsrLib>(request, response, -1), bkmHsrLib);
+    		new ExportExcel("题库数据", BkmHsrLib.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导出用户失败！失败信息："+e.getMessage());
