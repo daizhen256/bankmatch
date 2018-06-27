@@ -66,12 +66,10 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	});
 	// 点击下一题
 	function next() {
-		if (jQuery("#hsrType").val() == 0) {
+		if (jQuery("#hsrType").val() == 0||jQuery("#hsrType").val() == 2) {
 			nexthsr();
 		} else if (jQuery("#hsrType").val() == 1) {
 			nextrandomhsr();
-		}else{
-			
 		}
 	}
 	// 下一个全员随机题
