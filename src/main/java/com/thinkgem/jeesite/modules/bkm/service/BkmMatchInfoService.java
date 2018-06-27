@@ -4,8 +4,11 @@
 package com.thinkgem.jeesite.modules.bkm.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.bkm.entity.BkmHsrLib;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatch;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.bkm.entity.QuestionAndAnswer;
@@ -30,6 +34,9 @@ import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchInfoDao;
 @Transactional(readOnly = true)
 public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchInfo> {
 
+	@Autowired
+	private BkmMatchInfoDao bkmMatchInfoDao;
+	
 	public BkmMatchInfo get(String id) {
 		return super.get(id);
 	}
@@ -82,6 +89,16 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 			list.add(qaa);
 		}
 		return list;
+	}
+	
+	public void updateTodayHsrLib() {
+		BkmMatchInfo bkmMatchInfo = new BkmMatchInfo();
+		bkmMatchInfo.setDelFlag("0");
+		Map<String,BkmHsrLib> libmap = new HashMap<String,BkmHsrLib>();
+		List<BkmMatchInfo> resultlist = bkmMatchInfoDao.findTodayAllList(bkmMatchInfo);
+		for(BkmMatchInfo info : resultlist) {
+			
+		}
 	}
 	
 }

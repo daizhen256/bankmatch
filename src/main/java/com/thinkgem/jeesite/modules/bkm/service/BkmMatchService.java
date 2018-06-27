@@ -197,7 +197,7 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 	
 	@Transactional(readOnly = false)
 	public void updateStep(String infoid,String type,int step,int wrong,String answers,String hsrType,String questions) {
-		if("0".equals(hsrType)) {
+		if("0".equals(hsrType)||"2".equals(hsrType)) {
 			if("0".equals(type)) {
 				bkmMatchInfoDao.stepOK(infoid,step,answers);
 			}else {

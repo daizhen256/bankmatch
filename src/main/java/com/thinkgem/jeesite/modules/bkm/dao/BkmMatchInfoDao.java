@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.bkm.dao;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
@@ -28,4 +30,6 @@ public interface BkmMatchInfoDao extends CrudDao<BkmMatchInfo> {
 	public int stepRandOK(String id,int matchStep,String answers,String questions);
 	
 	public int stepRandWrong(String id,int matchStep,String answers,int wrongNum,String questions);
+
+	public List<BkmMatchInfo> findTodayAllList(BkmMatchInfo entity);
 }

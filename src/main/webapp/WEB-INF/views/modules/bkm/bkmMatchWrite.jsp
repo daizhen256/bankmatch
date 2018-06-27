@@ -43,7 +43,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 				jQuery("#shengyutime").show();
 				leftTimer();
 				// 如果是全员随机题的话 显示考题信息 显示考试按钮 隐藏准备按钮
-				if (jQuery("#hsrType").val() == 0) {
+				if (jQuery("#hsrType").val() == 0 || jQuery("#hsrType").val() == 2) {
 					jQuery(".exp").show();
 					jQuery("#submitForm").show();
 					jQuery("#inputForm").hide();
@@ -55,7 +55,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 					jQuery("#submitForm").show();
 					jQuery("#inputForm").hide();
 					nextrandomhsr();
-				} else {}
+				}
 			} else {
 				jQuery(".exp").show();
 				jQuery("#submitForm").hide();
