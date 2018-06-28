@@ -24,6 +24,7 @@ import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.bkm.entity.QuestionAndAnswer;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import com.thinkgem.jeesite.modules.bkm.dao.BkmHsrLibDao;
 import com.thinkgem.jeesite.modules.bkm.dao.BkmMatchInfoDao;
 
 /**
@@ -37,6 +38,9 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 
 	@Autowired
 	private BkmMatchInfoDao bkmMatchInfoDao;
+	
+	@Autowired
+	private BkmHsrLibDao bkmHsrLibDao;
 	
 	public BkmMatchInfo get(String id) {
 		return super.get(id);
@@ -92,6 +96,7 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 		return list;
 	}
 	
+	@Transactional(readOnly = false)
 	public void updateTodayHsrLib() {
 		BkmMatchInfo bkmMatchInfo = new BkmMatchInfo();
 		bkmMatchInfo.setDelFlag("0");
@@ -100,6 +105,9 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 		for(BkmMatchInfo info : resultlist) {
 			String question = info.getMatchHse();
 			String answer = info.getMatchAnswer();
+			if(answer==null) {
+				continue;
+			}
 			if(question.indexOf("&quot;")!=-1) {
 				question = question.replaceAll("&quot;", "\"");
 			}
@@ -108,21 +116,40 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 			}
 			JSONArray qarray = JSON.parseArray(question);
 			JSONArray aarray = JSON.parseArray(answer);
-			for(int i = 0;i<qarray.size();i++) {
+			for(int i = 0;i<aarray.size();i++) {
 				JSONObject qobj = qarray.getJSONObject(i);
 				JSONObject aobj = aarray.getJSONObject(i);
-				if(!qobj.containsKey("qlib")) {
+				if(!qobj.containsKey("libid")) {
 					break;
 				}
-				if(libmap.containsKey(qobj.getInteger("qlib"))) {
-					
+				if(libmap.containsKey(qobj.getString("libid"))) {
+					BkmHsrLib khl = libmap.get(qobj.getString("libid"));
+					khl.setHsrUsedTime(String.valueOf(Integer.valueOf(libmap.get(qobj.getString("libid")).getHsrUsedTime())+1));
+					if(qobj.getString("question").equals(aobj.getString("answer"))) {
+						khl.setHsrRightTime(String.valueOf(Integer.valueOf(libmap.get(qobj.getString("libid")).getHsrRightTime())+1));
+					}else {
+						khl.setHsrRightTime(String.valueOf(Integer.valueOf(libmap.get(qobj.getString("libid")).getHsrRightTime())));
+					}
+					libmap.put(qobj.getString("libid"), khl);
 				}else {
 					BkmHsrLib khl = new BkmHsrLib();
+					khl.setHsrLibId(Long.valueOf(qobj.getString("libid")));
 					khl.setHsrUsedTime("1");
-					khl.setHsrRightTime("");
-					libmap.put(qobj.getString("qlib"), khl);
+					if(qobj.getString("question").equals(aobj.getString("answer"))) {
+						khl.setHsrRightTime("1");
+					}else {
+						khl.setHsrRightTime("0");
+					}
+					libmap.put(qobj.getString("libid"), khl);
 				}
 			}
+		}
+		for (Map.Entry<String, BkmHsrLib> entry : libmap.entrySet()) {
+			// Map.entry<Integer,String> 映射项（键-值对） 有几个方法：用上面的名字entry
+			// entry.getKey() ;entry.getValue(); entry.setValue();
+			// map.entrySet() 返回此映射中包含的映射关系的 Set视图。
+			//System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+			bkmHsrLibDao.updateRightInfo(entry.getValue());
 		}
 	}
 	

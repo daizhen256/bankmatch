@@ -118,4 +118,11 @@
 			 <![CDATA[ a.hsr_lib_id >=(( SELECT MAX(hsr_lib_id) FROM bkm_hsr_lib) - ( SELECT MIN(hsr_lib_id) FROM bkm_hsr_lib)) * RAND() + ( SELECT MIN(hsr_lib_id) FROM bkm_hsr_lib) ]]>   LIMIT #{randomSuu}
 		</where>
 	</select>
+	
+	<update id="updateRightInfo">
+		UPDATE bkm_hsr_lib SET
+		hsr_used_time = #{hsrUsedTime},
+		hsr_right_time = #{hsrRightTime}
+		WHERE hsr_lib_id = #{hsrLibId}
+	</update>
 </mapper>

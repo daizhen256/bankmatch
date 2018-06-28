@@ -14,10 +14,10 @@ public class HsrLibInfoCollector {
 	@Autowired
 	private BkmMatchInfoService bkmMatchInfoService;
 	
-	@Scheduled(cron="0/30 * * * * ? ")
+	@Scheduled(cron="0 0 23 * * ?")
 	public void test() {
 		System.out.println("定时任务开始啦，哈哈哈");
-//		bkmMatchInfoService.
+		bkmMatchInfoService.updateTodayHsrLib();
         System.out.println("<<<---------结束执行HR数据同步任务--------->>>"); 
 	}
 	

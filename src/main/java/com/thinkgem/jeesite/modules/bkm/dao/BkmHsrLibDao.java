@@ -19,4 +19,6 @@ public interface BkmHsrLibDao extends CrudDao<BkmHsrLib> {
 	
 	public List<BkmHsrLib> findRandomList(int randomSuu);
 	
+	public int updateRightInfo(BkmHsrLib bkmHsrLib);
+	
 }
