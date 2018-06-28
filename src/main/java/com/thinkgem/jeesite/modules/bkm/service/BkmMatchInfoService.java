@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -97,7 +98,31 @@ public class BkmMatchInfoService extends CrudService<BkmMatchInfoDao, BkmMatchIn
 		Map<String,BkmHsrLib> libmap = new HashMap<String,BkmHsrLib>();
 		List<BkmMatchInfo> resultlist = bkmMatchInfoDao.findTodayAllList(bkmMatchInfo);
 		for(BkmMatchInfo info : resultlist) {
-			
+			String question = info.getMatchHse();
+			String answer = info.getMatchAnswer();
+			if(question.indexOf("&quot;")!=-1) {
+				question = question.replaceAll("&quot;", "\"");
+			}
+			if(answer.indexOf("&quot;")!=-1) {
+				answer = answer.replaceAll("&quot;", "\"");
+			}
+			JSONArray qarray = JSON.parseArray(question);
+			JSONArray aarray = JSON.parseArray(answer);
+			for(int i = 0;i<qarray.size();i++) {
+				JSONObject qobj = qarray.getJSONObject(i);
+				JSONObject aobj = aarray.getJSONObject(i);
+				if(!qobj.containsKey("qlib")) {
+					break;
+				}
+				if(libmap.containsKey(qobj.getInteger("qlib"))) {
+					
+				}else {
+					BkmHsrLib khl = new BkmHsrLib();
+					khl.setHsrUsedTime("1");
+					khl.setHsrRightTime("");
+					libmap.put(qobj.getString("qlib"), khl);
+				}
+			}
 		}
 	}
 	
