@@ -5,6 +5,7 @@
 	<sql id="bkmMatchColumns">
 		a.id AS "id",
 		a.match_date AS "matchDate",
+		a.match_end_date AS "matchEndDate",
 		a.match_name AS "matchName",
 		a.match_people_count AS "matchPeopleCount",
 		a.match_average_point AS "matchAveragePoint",
@@ -13,6 +14,7 @@
 		a.hsr_num AS "hsrNum",
 		a.match_time AS "matchTime",
 		a.hsr_type AS "hsrType",
+		a.hsr_weisuu AS "hsrWeisuu",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -81,6 +83,7 @@
 		INSERT INTO bkm_match(
 			id,
 			match_date,
+			match_end_date,
 			match_name,
 			match_people_count,
 			match_average_point,
@@ -89,6 +92,7 @@
 			hsr_num,
 			match_time,
 			hsr_type,
+			hsr_weisuu,
 			create_by,
 			create_date,
 			update_by,
@@ -98,6 +102,7 @@
 		) VALUES (
 			#{id},
 			#{matchDate},
+			#{matchEndDate},
 			#{matchName},
 			#{matchPeopleCount},
 			#{matchAveragePoint},
@@ -106,6 +111,7 @@
 			#{hsrNum},
 			#{matchTime},
 			#{hsrType},
+			#{hsrWeisuu},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},

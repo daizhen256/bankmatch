@@ -113,6 +113,7 @@ public class BkmMatchController extends BaseController {
 			return form(bkmMatch, model);
 		}
 		bkmMatchService.save(bkmMatch);
+		bkmMatchService.startMatch(bkmMatch);
 		addMessage(redirectAttributes, "保存考试信息成功");
 		return "redirect:"+Global.getAdminPath()+"/bkm/bkmMatch/form?id="+bkmMatch.getId();
 	}

@@ -9,12 +9,14 @@
 <link href="${ctxStatic}/css/thin-jeesite.css" type="text/css" rel="stylesheet" media="screen" />
 <style>
 body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-family:Work Sans,sans-serif;align-items:center;justify-content:center}.exp-container{box-sizing:border-box;padding:30px;width:100%;max-width:600px}.exp{position:relative;display:flex;margin-bottom:30px;width:100%;flex-direction:column-reverse;flex-wrap:wrap}.exp__label{margin-bottom:5px;transition:.3s}.exp__label:before{position:absolute;bottom:0;left:0;display:flex;width:42px;height:52px;background:0 0;color:#000;content:attr(data-icon);font-weight:400;font-size:24px;font-family:Ionicons;transition:color .3s 0s ease,transform .3s 0s ease;transform:rotateY(90deg);transform-origin:left;align-items:center;justify-content:center}.exp__input{box-sizing:border-box;padding:0 10px;width:100%;height:52px;outline:0;border:1px solid #ddd;font-weight:400;font-family:Work Sans,sans-serif;transition:.3s}.exp__input:focus{padding-left:42px;border-color:#bbb}.exp__input:focus+label:before{transform:rotateY(0)}.exp__input:valid{padding-left:42px;border-color:green}.exp__input:valid+label{color:green}.exp__input:valid+label:before{color:green;content:attr(data-icon-ok);font-size:34px;transform:rotateY(0)}.exp-title{margin-bottom:30px;text-align:center;font-weight:400;font-size:22px}.exp-title span{display:inline-block;padding:5px;background:#feffd4;font-size:22px}
+.red{ border:1px solid #d00; background:#ffe9e8; color:#d00;}
 </style>
 <script type="text/javascript">
 	var subindex = 0;
 	var hsr;
 	var matchStat;
 	var question;
+	var hsrWeisuu;
 	window.onload = function() {
 		$(document).keydown(function(event) {
 			switch (event.keyCode) {
@@ -30,6 +32,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		var preStat = '${bkmMatch.bkmMatchInfoList[0].preStat}';
 		matchStat = '${bkmMatch.matchStat}';
 		hsr = '${bkmMatch.bkmMatchInfoList[0].matchHse}';
+		hsrWeisuu = '${bkmMatch.hsrWeisuu}';
 		subindex = parseInt(document.getElementById("bkmMatchInfoList0.matchStep").value);
 		if (preStat == '未准备') {
 			// 如果没有准备 则隐藏考试按钮 显示准备按钮
@@ -99,7 +102,10 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			jQuery("#btnNext").hide();
 			return;
 		}
-		var randomquestion = randomNum(5);
+		if(hsrWeisuu==0) {
+			hsrWeisuu = 5;
+		}
+		var randomquestion = randomNum(hsrWeisuu);
 		jQuery("#example").val(randomquestion);
 		question = question + randomquestion + ',';
 		subindex++;
@@ -186,6 +192,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 			type = 1;
 			wrong = parseInt(wrong)+1;
 			jQuery("#wrongnum").val(wrong);
+			shake($("#wrongnum"),"red",3);
 		}
 		
 		jQuery.ajax({
@@ -201,6 +208,19 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 	        }
 	    });
 	}
+	function shake(ele,cls,times){
+		var i = 0,t= false ,o =ele.attr("class")+" ",c ="",times=times||2;
+		if(t) return;
+		t= setInterval(function(){
+		i++;
+		c = i%2 ? o+cls : o;
+		ele.attr("class",c);
+		if(i==2*times){
+		clearInterval(t);
+		ele.removeClass(cls);
+		}
+		},200);
+		};
 </script>
 </head>
 <body>
@@ -236,6 +256,7 @@ body,html{display:flex;width:100%;height:100%;background-color:#f4f4f4;font-fami
 		<form:hidden path="matchTime"/>
 		<form:hidden path="hsrNum"/>
 		<form:hidden path="hsrType"/>
+		<form:hidden path="hsrWeisuu"/>
 		<form:hidden path="bkmMatchInfoList[0].matchHse"/>
 		<form:hidden path="bkmMatchInfoList[0].matchAnswer"/>
 		<form:hidden path="bkmMatchInfoList[0].id"/>

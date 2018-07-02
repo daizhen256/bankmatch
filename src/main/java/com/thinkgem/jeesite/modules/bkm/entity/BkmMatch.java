@@ -20,7 +20,8 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class BkmMatch extends DataEntity<BkmMatch> {
 	
 	private static final long serialVersionUID = 1L;
-	private Date matchDate;		// 考试日期
+	private Date matchDate;		// 考试开始日期
+	private Date matchEndDate;		// 考试截止日期
 	private String matchName;		// 考试名称
 	private int matchPeopleCount;		// 总人数
 	private double matchAveragePoint;		// 平均分
@@ -31,6 +32,7 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 	private int hsrNum; //试题数量，为空则不限制
 	private int matchTime; //考试时间（分钟）
 	private int hsrType; //试题类型 0:统一随机题   1:每人随机题   2:题库题
+	private int hsrWeisuu; //考题位数
 	
 	public BkmMatch() {
 		super();
@@ -41,7 +43,7 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@NotNull(message="考试日期不能为空")
+	@NotNull(message="考试开始日期不能为空")
 	public Date getMatchDate() {
 		return matchDate;
 	}
@@ -121,6 +123,24 @@ public class BkmMatch extends DataEntity<BkmMatch> {
 
 	public void setHsrType(int hsrType) {
 		this.hsrType = hsrType;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@NotNull(message="考试截止日期不能为空")
+	public Date getMatchEndDate() {
+		return matchEndDate;
+	}
+
+	public void setMatchEndDate(Date matchEndDate) {
+		this.matchEndDate = matchEndDate;
+	}
+
+	public int getHsrWeisuu() {
+		return hsrWeisuu;
+	}
+
+	public void setHsrWeisuu(int hsrWeisuu) {
+		this.hsrWeisuu = hsrWeisuu;
 	}
 	
 }

@@ -22,6 +22,7 @@ import com.thinkgem.jeesite.modules.bkm.entity.BkmMatch;
 import com.thinkgem.jeesite.modules.bkm.entity.BkmMatchInfo;
 import com.thinkgem.jeesite.modules.bkm.service.BkmMatchInfoService;
 import com.thinkgem.jeesite.modules.bkm.service.BkmMatchService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 考试历史管理Controller
@@ -61,6 +62,7 @@ public class BkmMatchInfoController extends BaseController {
 	@RequiresPermissions("bkm:bkmMatchInfo:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(BkmMatchInfo bkmMatchInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
+		bkmMatchInfo.setMatchUser(UserUtils.getUser());
 		List<BkmMatchInfo> page = bkmMatchInfoService.findList(bkmMatchInfo); 
 		model.addAttribute("list", page);
 		return "modules/bkm/bkmMatchInfoList";

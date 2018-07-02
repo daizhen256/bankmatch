@@ -105,7 +105,7 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 		bkmMatch.setMatchStat("1");
 		super.save(bkmMatch);
 		if(bkmMatch.getHsrType()==0) {
-			JSONArray matchHse = getMatchHse(bkmMatch.getHsrNum()); 
+			JSONArray matchHse = getMatchHse(bkmMatch.getHsrNum(),bkmMatch.getHsrWeisuu()); 
 			for (BkmMatchInfo bkmMatchInfo : bkmMatch.getBkmMatchInfoList()){
 				bkmMatchInfo.setMatchHse(matchHse.toJSONString());
 				bkmMatchInfo.preUpdate();
@@ -132,13 +132,16 @@ public class BkmMatchService extends CrudService<BkmMatchDao, BkmMatch> {
 		}
 	}
 	
-	private JSONArray getMatchHse(int hsrnum) {
+	private JSONArray getMatchHse(int hsrnum, int weisuu) {
+		if(weisuu==0) {
+			weisuu = 5;
+		}
 		JSONArray hse = new JSONArray();
 		Random rand = new Random();
 		DecimalFormat dcmFmt = new DecimalFormat("0.00");
 		for(int i=0;i<hsrnum;i++) {
 			JSONObject question = new JSONObject();
-			 float f = rand.nextFloat() * 1000;
+			 double f = rand.nextDouble() * Math.pow(10, weisuu);
 			question.put("question", dcmFmt.format(f));
 			hse.add(question);
 		}

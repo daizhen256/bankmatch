@@ -81,7 +81,7 @@ public class LoginController extends BaseController{
 		String message;
 		long difference = 0;
         try {
-            Date dt1 = df.parse("2018-07-01");
+            Date dt1 = df.parse("2018-07-22");
             Date dt2 = new Date();
             if (dt1.getTime() <= dt2.getTime()) {
             	model.addAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM, "试用到期，请更换正式版本");

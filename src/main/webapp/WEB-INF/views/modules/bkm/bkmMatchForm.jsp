@@ -139,7 +139,7 @@
 					<input id="startButton" class="btn btn-primary" type="button"
 						value="开始考试" />
 					<input id="stopButton" class="btn btn-primary" type="button"
-						value="结束考试" />	
+						value="提前结束考试" />	
 				</div>
 			</div>
 		</div>
@@ -150,8 +150,12 @@
 			<div class="col-md-10">
 				<div class="form-group">
 					<input name="matchStartDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${bkmMatch.matchStartDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					value="<fmt:formatDate value="${bkmMatch.matchStartDate}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+					~
+					<input name="matchEndDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${bkmMatch.matchStartDate}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 				</div>
 			</div>
 		</div>
@@ -184,6 +188,17 @@
 			<div class="col-md-10">
 				<div class="form-group">
 					<form:radiobuttons path="hsrType" items="${fns:getDictList('hsr_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				</div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="col-md-2">
+				<label class="control-label">考题位数：</label>
+			</div>
+			<div class="col-md-10">
+				<div class="form-group">
+					<form:input path="hsrWeisuu" htmlEscape="false" maxlength="256"
+						class="input-xlarge required" />
 				</div>
 			</div>
 		</div>
